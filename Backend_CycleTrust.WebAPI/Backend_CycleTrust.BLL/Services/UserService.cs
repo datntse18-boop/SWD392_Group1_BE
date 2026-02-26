@@ -64,7 +64,7 @@ namespace Backend_CycleTrust.BLL.Services
             {
                 FullName = dto.FullName,
                 Email = dto.Email,
-                Password = dto.Password,
+                Password = BCrypt.Net.BCrypt.HashPassword(dto.Password),
                 Phone = dto.Phone,
                 Address = dto.Address,
                 RoleId = dto.RoleId,

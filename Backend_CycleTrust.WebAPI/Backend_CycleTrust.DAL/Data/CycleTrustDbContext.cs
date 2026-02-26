@@ -220,11 +220,16 @@ namespace Backend_CycleTrust.DAL.Data
             );
 
             // Users: 1 Admin, 1 Buyer, 1 Seller, 1 Inspector
+            // Passwords hashed bằng BCrypt (work factor 11):
+            // admin123     => $2a$11$VhQo3xikBLmFMVGM3U0kYOHGlhwtAPrwjjZV4WJmkjmoqm8SuC4Pu
+            // buyer123     => $2a$11$Gtt/lWpnPzDa/VVmR/fYm.rl9lzFFlpuhxY7ExHZd1huXudhQMHqm
+            // seller123    => $2a$11$tBkwBXLD4x16.MkVgIvUjuuWGUQNgUhyulVRNRc8Ps2.Rb4A6Qdsm
+            // inspector123 => $2a$11$QPwNKuIisbgosdAq.f.xdeEncp0Wpq4mGP2VQCkmcSyEZVg8GO/ba
             modelBuilder.Entity<User>().HasData(
-                new User { UserId = 1, FullName = "Admin CycleTrust", Email = "admin@cycletrust.com", Password = "admin123", Phone = "0901000001", Address = "Ho Chi Minh City", RoleId = 1, Status = Enums.UserStatus.ACTIVE, CreatedAt = seedDate },
-                new User { UserId = 2, FullName = "Nguyen Van Buyer", Email = "buyer@cycletrust.com", Password = "buyer123", Phone = "0901000002", Address = "Ha Noi", RoleId = 2, Status = Enums.UserStatus.ACTIVE, CreatedAt = seedDate },
-                new User { UserId = 3, FullName = "Tran Thi Seller", Email = "seller@cycletrust.com", Password = "seller123", Phone = "0901000003", Address = "Da Nang", RoleId = 3, Status = Enums.UserStatus.ACTIVE, CreatedAt = seedDate },
-                new User { UserId = 4, FullName = "Le Van Inspector", Email = "inspector@cycletrust.com", Password = "inspector123", Phone = "0901000004", Address = "Ho Chi Minh City", RoleId = 4, Status = Enums.UserStatus.ACTIVE, CreatedAt = seedDate }
+                new User { UserId = 1, FullName = "Admin CycleTrust", Email = "admin@cycletrust.com", Password = "$2a$11$VhQo3xikBLmFMVGM3U0kYOHGlhwtAPrwjjZV4WJmkjmoqm8SuC4Pu", Phone = "0901000001", Address = "Ho Chi Minh City", RoleId = 1, Status = Enums.UserStatus.ACTIVE, CreatedAt = seedDate },
+                new User { UserId = 2, FullName = "Nguyen Van Buyer", Email = "buyer@cycletrust.com", Password = "$2a$11$Gtt/lWpnPzDa/VVmR/fYm.rl9lzFFlpuhxY7ExHZd1huXudhQMHqm", Phone = "0901000002", Address = "Ha Noi", RoleId = 2, Status = Enums.UserStatus.ACTIVE, CreatedAt = seedDate },
+                new User { UserId = 3, FullName = "Tran Thi Seller", Email = "seller@cycletrust.com", Password = "$2a$11$tBkwBXLD4x16.MkVgIvUjuuWGUQNgUhyulVRNRc8Ps2.Rb4A6Qdsm", Phone = "0901000003", Address = "Da Nang", RoleId = 3, Status = Enums.UserStatus.ACTIVE, CreatedAt = seedDate },
+                new User { UserId = 4, FullName = "Le Van Inspector", Email = "inspector@cycletrust.com", Password = "$2a$11$QPwNKuIisbgosdAq.f.xdeEncp0Wpq4mGP2VQCkmcSyEZVg8GO/ba", Phone = "0901000004", Address = "Ho Chi Minh City", RoleId = 4, Status = Enums.UserStatus.ACTIVE, CreatedAt = seedDate }
             );
 
             // Brands
