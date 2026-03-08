@@ -1,4 +1,4 @@
-using System.Text;
+﻿using System.Text;
 using Backend_CycleTrust.BLL.Interfaces;
 using Backend_CycleTrust.BLL.Services;
 using Backend_CycleTrust.DAL.Data;
@@ -77,7 +77,11 @@ namespace Backend_CycleTrust.WebAPI
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "CycleTrust API", Version = "v1" });
 
+<<<<<<< HEAD
                 // Cho ph�p nh?p JWT token trong Swagger UI
+=======
+                // Cho phép nh?p JWT token trong Swagger UI
+>>>>>>> 3728f28665da23d4a88a618a39b5a67a373c3096
                 c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
                 {
                     Name = "Authorization",
@@ -85,8 +89,12 @@ namespace Backend_CycleTrust.WebAPI
                     Scheme = "Bearer",
                     BearerFormat = "JWT",
                     In = ParameterLocation.Header,
+<<<<<<< HEAD
                     Description = "Nh?p JWT token. V� d?: Bearer {token}"
                     
+=======
+                    Description = "Nh?p JWT token. Ví d?: Bearer {token}"
+>>>>>>> 3728f28665da23d4a88a618a39b5a67a373c3096
                 });
 
                 c.AddSecurityRequirement(new OpenApiSecurityRequirement
@@ -118,6 +126,30 @@ namespace Backend_CycleTrust.WebAPI
 
             var app = builder.Build();
              using (var scope = app.Services.CreateScope())
+            {
+                var logger = scope.ServiceProvider.GetRequiredService<ILogger<Program>>();
+                var dbContext = scope.ServiceProvider.GetRequiredService<CycleTrustDbContext>();
+                try
+                {
+                    var canConnect = dbContext.Database.CanConnect();
+                    if (canConnect)
+                    {
+                        logger.LogInformation("✅ Ket noi Database thành công!");
+                       
+                    }
+                    else
+                    {
+                        logger.LogError("❌ Không thể kết nối đến Database!");
+                    }
+                }
+                catch (Exception ex)
+                {
+                    logger.LogError(ex, "❌ Lỗi khi kết nối đến Database: {Message}", ex.Message);
+                }
+            }
+
+            // ===== Debug: Kiểm tra kết nối Database =====
+            using (var scope = app.Services.CreateScope())
             {
                 var logger = scope.ServiceProvider.GetRequiredService<ILogger<Program>>();
                 var dbContext = scope.ServiceProvider.GetRequiredService<CycleTrustDbContext>();
