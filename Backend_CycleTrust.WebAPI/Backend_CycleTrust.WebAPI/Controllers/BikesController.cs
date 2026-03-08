@@ -16,9 +16,14 @@ namespace Backend_CycleTrust.WebAPI.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<BikeResponseDto>>> GetAll()
+        public async Task<ActionResult<IEnumerable<BikeResponseDto>>> GetAll(
+            [FromQuery] int? categoryId,
+            [FromQuery] int? brandId,
+            [FromQuery] decimal? minPrice,
+            [FromQuery] decimal? maxPrice,
+            [FromQuery] string? searchTitle)
         {
-            var bikes = await _bikeService.GetAllAsync();
+            var bikes = await _bikeService.GetAllAsync(categoryId, brandId, minPrice, maxPrice, searchTitle);
             return Ok(bikes);
         }
 

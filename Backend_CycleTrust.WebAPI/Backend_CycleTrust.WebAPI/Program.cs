@@ -77,7 +77,7 @@ namespace Backend_CycleTrust.WebAPI
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "CycleTrust API", Version = "v1" });
 
-                // Cho ph�p nh?p JWT token trong Swagger UI
+                // Cho ph�p nh?p JWT token trong Swagger UI
                 c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
                 {
                     Name = "Authorization",
@@ -85,7 +85,8 @@ namespace Backend_CycleTrust.WebAPI
                     Scheme = "Bearer",
                     BearerFormat = "JWT",
                     In = ParameterLocation.Header,
-                    Description = "Nh?p JWT token. V� d?: Bearer {token}"
+                    Description = "Nh?p JWT token. V� d?: Bearer {token}"
+                    
                 });
 
                 c.AddSecurityRequirement(new OpenApiSecurityRequirement
@@ -116,6 +117,28 @@ namespace Backend_CycleTrust.WebAPI
             });
 
             var app = builder.Build();
+             using (var scope = app.Services.CreateScope())
+            {
+                var logger = scope.ServiceProvider.GetRequiredService<ILogger<Program>>();
+                var dbContext = scope.ServiceProvider.GetRequiredService<CycleTrustDbContext>();
+                try
+                {
+                    var canConnect = dbContext.Database.CanConnect();
+                    if (canConnect)
+                    {
+                        logger.LogInformation("✅ Ket noi Database thành công!");
+                       
+                    }
+                    else
+                    {
+                        logger.LogError("❌ Không thể kết nối đến Database!");
+                    }
+                }
+                catch (Exception ex)
+                {
+                    logger.LogError(ex, "❌ Lỗi khi kết nối đến Database: {Message}", ex.Message);
+                }
+            }
 
             if (app.Environment.IsDevelopment())
             {
