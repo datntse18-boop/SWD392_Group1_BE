@@ -9,5 +9,7 @@ namespace Backend_CycleTrust.BLL.Interfaces
         Task<BikeResponseDto> CreateAsync(CreateBikeDto dto);
         Task<bool> UpdateAsync(int id, UpdateBikeDto dto);
         Task<bool> DeleteAsync(int id);
+        Task<bool> ApproveAsync(int bikeId);
+        Task<bool> RejectAsync(int bikeId);
     }
 }
