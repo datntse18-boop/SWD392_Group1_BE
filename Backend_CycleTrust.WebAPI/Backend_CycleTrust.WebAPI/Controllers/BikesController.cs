@@ -1,4 +1,5 @@
 using Backend_CycleTrust.BLL.DTOs.BikeDTOs;
+using Backend_CycleTrust.BLL.DTOs.BikeImageDTOs;
 using Backend_CycleTrust.BLL.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
@@ -9,10 +10,20 @@ namespace Backend_CycleTrust.WebAPI.Controllers
     public class BikesController : ControllerBase
     {
         private readonly IBikeService _bikeService;
+        private readonly ICloudinaryService _cloudinaryService;
+        private readonly IBikeImageService _bikeImageService;
+        private readonly ILogger<BikesController> _logger;
 
-        public BikesController(IBikeService bikeService)
+        public BikesController(
+            IBikeService bikeService, 
+            ICloudinaryService cloudinaryService, 
+            IBikeImageService bikeImageService,
+            ILogger<BikesController> logger)
         {
             _bikeService = bikeService;
+            _cloudinaryService = cloudinaryService;
+            _bikeImageService = bikeImageService;
+            _logger = logger;
         }
 
         [HttpGet]
@@ -56,6 +67,32 @@ namespace Backend_CycleTrust.WebAPI.Controllers
             var result = await _bikeService.DeleteAsync(id);
             if (!result) return NotFound();
             return NoContent();
+        }
+
+        [HttpPost("{id}/images")]
+        public async Task<ActionResult<string>> UploadImage(int id, IFormFile file)
+        {
+            try
+            {
+                var bike = await _bikeService.GetByIdAsync(id);
+                if (bike == null) return NotFound("Bike not found.");
+
+                var imageUrl = await _cloudinaryService.UploadImageAsync(file, "bikes");
+                
+                // Save URL to database
+                await _bikeImageService.CreateAsync(new CreateBikeImageDto
+                {
+                    BikeId = id,
+                    ImageUrl = imageUrl
+                });
+                
+                return Ok(new { imageUrl });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error uploading image for bike {BikeId}: {Message}", id, ex.Message);
+                return BadRequest(new { message = ex.Message });
+            }
         }
     }
 }

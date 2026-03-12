@@ -31,6 +31,7 @@ namespace Backend_CycleTrust.WebAPI
             builder.Services.AddScoped<IBrandService, BrandService>();
             builder.Services.AddScoped<ICategoryService, CategoryService>();
             builder.Services.AddScoped<IBikeService, BikeService>();
+            builder.Services.AddScoped<ICloudinaryService, CloudinaryService>();
             builder.Services.AddScoped<IBikeImageService, BikeImageService>();
             builder.Services.AddScoped<IInspectionReportService, InspectionReportService>();
             builder.Services.AddScoped<IMessageService, MessageService>();
@@ -153,7 +154,3 @@ namespace Backend_CycleTrust.WebAPI
         }
     }
 }
-
-
-
-
