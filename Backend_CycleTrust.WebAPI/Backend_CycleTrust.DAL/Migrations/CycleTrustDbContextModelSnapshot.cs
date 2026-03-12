@@ -4,7 +4,6 @@ using Backend_CycleTrust.DAL.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
@@ -16,65 +15,63 @@ namespace Backend_CycleTrust.DAL.Migrations
         protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
-            modelBuilder
-                .HasAnnotation("ProductVersion", "9.0.2")
-                .HasAnnotation("Relational:MaxIdentifierLength", 63);
-
-            NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
+            modelBuilder.HasAnnotation("ProductVersion", "9.0.2");
 
             modelBuilder.Entity("Backend_CycleTrust.DAL.Entities.Bike", b =>
                 {
                     b.Property<int>("BikeId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
+                        .HasColumnType("INTEGER")
                         .HasColumnName("bike_id");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("BikeId"));
 
                     b.Property<string>("BikeCondition")
                         .HasMaxLength(20)
-                        .HasColumnType("character varying(20)")
+                        .HasColumnType("TEXT")
                         .HasColumnName("bike_condition");
 
                     b.Property<int?>("BrandId")
-                        .HasColumnType("integer")
+                        .HasColumnType("INTEGER")
                         .HasColumnName("brand_id");
 
                     b.Property<int?>("CategoryId")
-                        .HasColumnType("integer")
+                        .HasColumnType("INTEGER")
                         .HasColumnName("category_id");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("TEXT")
                         .HasColumnName("created_at");
 
                     b.Property<string>("Description")
-                        .HasColumnType("text")
+                        .HasColumnType("TEXT")
                         .HasColumnName("description");
 
                     b.Property<string>("FrameSize")
                         .HasMaxLength(50)
-                        .HasColumnType("character varying(50)")
+                        .HasColumnType("TEXT")
                         .HasColumnName("frame_size");
+
+                    b.Property<bool>("IsAnonymous")
+                        .HasColumnType("INTEGER")
+                        .HasColumnName("is_anonymous");
 
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(12,2)")
                         .HasColumnName("price");
 
                     b.Property<int>("SellerId")
-                        .HasColumnType("integer")
+                        .HasColumnType("INTEGER")
                         .HasColumnName("seller_id");
 
                     b.Property<string>("Status")
                         .IsRequired()
                         .HasMaxLength(20)
-                        .HasColumnType("character varying(20)")
+                        .HasColumnType("TEXT")
                         .HasColumnName("status");
 
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasMaxLength(255)
-                        .HasColumnType("character varying(255)")
+                        .HasColumnType("TEXT")
                         .HasColumnName("title");
 
                     b.HasKey("BikeId");
@@ -97,6 +94,7 @@ namespace Backend_CycleTrust.DAL.Migrations
                             CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             Description = "Xe đạp đường trường Giant Contend AR 1, khung nhôm nhẹ, groupset Shimano 105.",
                             FrameSize = "M",
+                            IsAnonymous = false,
                             Price = 25000000m,
                             SellerId = 3,
                             Status = "APPROVED",
@@ -111,6 +109,7 @@ namespace Backend_CycleTrust.DAL.Migrations
                             CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             Description = "Xe đạp leo núi Trek Marlin 7, phuộc RockShox, 27.5 inch.",
                             FrameSize = "L",
+                            IsAnonymous = false,
                             Price = 18000000m,
                             SellerId = 3,
                             Status = "APPROVED",
@@ -125,6 +124,7 @@ namespace Backend_CycleTrust.DAL.Migrations
                             CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             Description = "Xe đạp thành phố cao cấp, khung carbon, phù hợp đi làm và tập luyện.",
                             FrameSize = "M",
+                            IsAnonymous = false,
                             Price = 35000000m,
                             SellerId = 3,
                             Status = "PENDING",
@@ -139,6 +139,7 @@ namespace Backend_CycleTrust.DAL.Migrations
                             CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             Description = "Xe đạp fitness nhẹ, phù hợp di chuyển hàng ngày trong thành phố.",
                             FrameSize = "S",
+                            IsAnonymous = false,
                             Price = 12000000m,
                             SellerId = 3,
                             Status = "APPROVED",
@@ -150,19 +151,17 @@ namespace Backend_CycleTrust.DAL.Migrations
                 {
                     b.Property<int>("ImageId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
+                        .HasColumnType("INTEGER")
                         .HasColumnName("image_id");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("ImageId"));
-
                     b.Property<int>("BikeId")
-                        .HasColumnType("integer")
+                        .HasColumnType("INTEGER")
                         .HasColumnName("bike_id");
 
                     b.Property<string>("ImageUrl")
                         .IsRequired()
                         .HasMaxLength(500)
-                        .HasColumnType("character varying(500)")
+                        .HasColumnType("TEXT")
                         .HasColumnName("image_url");
 
                     b.HasKey("ImageId");
@@ -176,15 +175,13 @@ namespace Backend_CycleTrust.DAL.Migrations
                 {
                     b.Property<int>("BrandId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
+                        .HasColumnType("INTEGER")
                         .HasColumnName("brand_id");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("BrandId"));
 
                     b.Property<string>("BrandName")
                         .IsRequired()
                         .HasMaxLength(100)
-                        .HasColumnType("character varying(100)")
+                        .HasColumnType("TEXT")
                         .HasColumnName("brand_name");
 
                     b.HasKey("BrandId");
@@ -226,15 +223,13 @@ namespace Backend_CycleTrust.DAL.Migrations
                 {
                     b.Property<int>("CategoryId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
+                        .HasColumnType("INTEGER")
                         .HasColumnName("category_id");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("CategoryId"));
 
                     b.Property<string>("CategoryName")
                         .IsRequired()
                         .HasMaxLength(100)
-                        .HasColumnType("character varying(100)")
+                        .HasColumnType("TEXT")
                         .HasColumnName("category_name");
 
                     b.HasKey("CategoryId");
@@ -276,48 +271,46 @@ namespace Backend_CycleTrust.DAL.Migrations
                 {
                     b.Property<int>("ReportId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
+                        .HasColumnType("INTEGER")
                         .HasColumnName("report_id");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("ReportId"));
-
                     b.Property<int>("BikeId")
-                        .HasColumnType("integer")
+                        .HasColumnType("INTEGER")
                         .HasColumnName("bike_id");
 
                     b.Property<string>("BrakeCondition")
-                        .HasColumnType("text")
+                        .HasColumnType("TEXT")
                         .HasColumnName("brake_condition");
 
                     b.Property<string>("DrivetrainCondition")
-                        .HasColumnType("text")
+                        .HasColumnType("TEXT")
                         .HasColumnName("drivetrain_condition");
 
                     b.Property<string>("FrameCondition")
-                        .HasColumnType("text")
+                        .HasColumnType("TEXT")
                         .HasColumnName("frame_condition");
 
                     b.Property<DateTime>("InspectedAt")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("TEXT")
                         .HasColumnName("inspected_at");
 
                     b.Property<string>("InspectionStatus")
                         .IsRequired()
                         .HasMaxLength(20)
-                        .HasColumnType("character varying(20)")
+                        .HasColumnType("TEXT")
                         .HasColumnName("inspection_status");
 
                     b.Property<int>("InspectorId")
-                        .HasColumnType("integer")
+                        .HasColumnType("INTEGER")
                         .HasColumnName("inspector_id");
 
                     b.Property<string>("OverallComment")
-                        .HasColumnType("text")
+                        .HasColumnType("TEXT")
                         .HasColumnName("overall_comment");
 
                     b.Property<string>("ReportFile")
                         .HasMaxLength(500)
-                        .HasColumnType("character varying(500)")
+                        .HasColumnType("TEXT")
                         .HasColumnName("report_file");
 
                     b.HasKey("ReportId");
@@ -359,30 +352,28 @@ namespace Backend_CycleTrust.DAL.Migrations
                 {
                     b.Property<int>("MessageId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
+                        .HasColumnType("INTEGER")
                         .HasColumnName("message_id");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("MessageId"));
-
                     b.Property<int?>("BikeId")
-                        .HasColumnType("integer")
+                        .HasColumnType("INTEGER")
                         .HasColumnName("bike_id");
 
                     b.Property<string>("Content")
                         .IsRequired()
-                        .HasColumnType("text")
+                        .HasColumnType("TEXT")
                         .HasColumnName("content");
 
                     b.Property<int>("ReceiverId")
-                        .HasColumnType("integer")
+                        .HasColumnType("INTEGER")
                         .HasColumnName("receiver_id");
 
                     b.Property<int>("SenderId")
-                        .HasColumnType("integer")
+                        .HasColumnType("INTEGER")
                         .HasColumnName("sender_id");
 
                     b.Property<DateTime>("SentAt")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("TEXT")
                         .HasColumnName("sent_at");
 
                     b.HasKey("MessageId");
@@ -420,21 +411,19 @@ namespace Backend_CycleTrust.DAL.Migrations
                 {
                     b.Property<int>("OrderId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
+                        .HasColumnType("INTEGER")
                         .HasColumnName("order_id");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("OrderId"));
-
                     b.Property<int>("BikeId")
-                        .HasColumnType("integer")
+                        .HasColumnType("INTEGER")
                         .HasColumnName("bike_id");
 
                     b.Property<int>("BuyerId")
-                        .HasColumnType("integer")
+                        .HasColumnType("INTEGER")
                         .HasColumnName("buyer_id");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("TEXT")
                         .HasColumnName("created_at");
 
                     b.Property<decimal?>("DepositAmount")
@@ -442,13 +431,13 @@ namespace Backend_CycleTrust.DAL.Migrations
                         .HasColumnName("deposit_amount");
 
                     b.Property<int>("SellerId")
-                        .HasColumnType("integer")
+                        .HasColumnType("INTEGER")
                         .HasColumnName("seller_id");
 
                     b.Property<string>("Status")
                         .IsRequired()
                         .HasMaxLength(20)
-                        .HasColumnType("character varying(20)")
+                        .HasColumnType("TEXT")
                         .HasColumnName("status");
 
                     b.Property<decimal>("TotalAmount")
@@ -494,32 +483,30 @@ namespace Backend_CycleTrust.DAL.Migrations
                 {
                     b.Property<int>("ReportId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
+                        .HasColumnType("INTEGER")
                         .HasColumnName("report_id");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("ReportId"));
-
                     b.Property<int?>("BikeId")
-                        .HasColumnType("integer")
+                        .HasColumnType("INTEGER")
                         .HasColumnName("bike_id");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("TEXT")
                         .HasColumnName("created_at");
 
                     b.Property<string>("Reason")
                         .IsRequired()
-                        .HasColumnType("text")
+                        .HasColumnType("TEXT")
                         .HasColumnName("reason");
 
                     b.Property<int>("ReporterId")
-                        .HasColumnType("integer")
+                        .HasColumnType("INTEGER")
                         .HasColumnName("reporter_id");
 
                     b.Property<string>("Status")
                         .IsRequired()
                         .HasMaxLength(20)
-                        .HasColumnType("character varying(20)")
+                        .HasColumnType("TEXT")
                         .HasColumnName("status");
 
                     b.HasKey("ReportId");
@@ -546,33 +533,31 @@ namespace Backend_CycleTrust.DAL.Migrations
                 {
                     b.Property<int>("ReviewId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
+                        .HasColumnType("INTEGER")
                         .HasColumnName("review_id");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("ReviewId"));
-
                     b.Property<int>("BuyerId")
-                        .HasColumnType("integer")
+                        .HasColumnType("INTEGER")
                         .HasColumnName("buyer_id");
 
                     b.Property<string>("Comment")
-                        .HasColumnType("text")
+                        .HasColumnType("TEXT")
                         .HasColumnName("comment");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("TEXT")
                         .HasColumnName("created_at");
 
                     b.Property<int>("OrderId")
-                        .HasColumnType("integer")
+                        .HasColumnType("INTEGER")
                         .HasColumnName("order_id");
 
                     b.Property<int?>("Rating")
-                        .HasColumnType("integer")
+                        .HasColumnType("INTEGER")
                         .HasColumnName("rating");
 
                     b.Property<int>("SellerId")
-                        .HasColumnType("integer")
+                        .HasColumnType("INTEGER")
                         .HasColumnName("seller_id");
 
                     b.HasKey("ReviewId");
@@ -602,15 +587,13 @@ namespace Backend_CycleTrust.DAL.Migrations
                 {
                     b.Property<int>("RoleId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
+                        .HasColumnType("INTEGER")
                         .HasColumnName("role_id");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("RoleId"));
 
                     b.Property<string>("RoleName")
                         .IsRequired()
                         .HasMaxLength(50)
-                        .HasColumnType("character varying(50)")
+                        .HasColumnType("TEXT")
                         .HasColumnName("role_name");
 
                     b.HasKey("RoleId");
@@ -647,51 +630,49 @@ namespace Backend_CycleTrust.DAL.Migrations
                 {
                     b.Property<int>("UserId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
+                        .HasColumnType("INTEGER")
                         .HasColumnName("user_id");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("UserId"));
 
                     b.Property<string>("Address")
                         .HasMaxLength(255)
-                        .HasColumnType("character varying(255)")
+                        .HasColumnType("TEXT")
                         .HasColumnName("address");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("TEXT")
                         .HasColumnName("created_at");
 
                     b.Property<string>("Email")
                         .IsRequired()
                         .HasMaxLength(100)
-                        .HasColumnType("character varying(100)")
+                        .HasColumnType("TEXT")
                         .HasColumnName("email");
 
                     b.Property<string>("FullName")
                         .IsRequired()
                         .HasMaxLength(100)
-                        .HasColumnType("character varying(100)")
+                        .HasColumnType("TEXT")
                         .HasColumnName("full_name");
 
                     b.Property<string>("Password")
                         .IsRequired()
                         .HasMaxLength(255)
-                        .HasColumnType("character varying(255)")
+                        .HasColumnType("TEXT")
                         .HasColumnName("password");
 
                     b.Property<string>("Phone")
                         .HasMaxLength(20)
-                        .HasColumnType("character varying(20)")
+                        .HasColumnType("TEXT")
                         .HasColumnName("phone");
 
                     b.Property<int>("RoleId")
-                        .HasColumnType("integer")
+                        .HasColumnType("INTEGER")
                         .HasColumnName("role_id");
 
                     b.Property<string>("Status")
                         .IsRequired()
                         .HasMaxLength(20)
-                        .HasColumnType("character varying(20)")
+                        .HasColumnType("TEXT")
                         .HasColumnName("status");
 
                     b.HasKey("UserId");
@@ -758,21 +739,19 @@ namespace Backend_CycleTrust.DAL.Migrations
                 {
                     b.Property<int>("WishlistId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
+                        .HasColumnType("INTEGER")
                         .HasColumnName("wishlist_id");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("WishlistId"));
-
                     b.Property<int>("BikeId")
-                        .HasColumnType("integer")
+                        .HasColumnType("INTEGER")
                         .HasColumnName("bike_id");
 
                     b.Property<int>("BuyerId")
-                        .HasColumnType("integer")
+                        .HasColumnType("INTEGER")
                         .HasColumnName("buyer_id");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("TEXT")
                         .HasColumnName("created_at");
 
                     b.HasKey("WishlistId");

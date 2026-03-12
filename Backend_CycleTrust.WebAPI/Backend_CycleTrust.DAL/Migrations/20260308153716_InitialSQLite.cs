@@ -1,6 +1,5 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
-using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
@@ -9,7 +8,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Backend_CycleTrust.DAL.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialCreate : Migration
+    public partial class InitialSQLite : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -18,9 +17,9 @@ namespace Backend_CycleTrust.DAL.Migrations
                 name: "brands",
                 columns: table => new
                 {
-                    brand_id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    brand_name = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false)
+                    brand_id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    brand_name = table.Column<string>(type: "TEXT", maxLength: 100, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -31,9 +30,9 @@ namespace Backend_CycleTrust.DAL.Migrations
                 name: "categories",
                 columns: table => new
                 {
-                    category_id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    category_name = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false)
+                    category_id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    category_name = table.Column<string>(type: "TEXT", maxLength: 100, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -44,9 +43,9 @@ namespace Backend_CycleTrust.DAL.Migrations
                 name: "roles",
                 columns: table => new
                 {
-                    role_id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    role_name = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false)
+                    role_id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    role_name = table.Column<string>(type: "TEXT", maxLength: 50, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -57,16 +56,16 @@ namespace Backend_CycleTrust.DAL.Migrations
                 name: "users",
                 columns: table => new
                 {
-                    user_id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    full_name = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
-                    email = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
-                    password = table.Column<string>(type: "character varying(255)", maxLength: 255, nullable: false),
-                    phone = table.Column<string>(type: "character varying(20)", maxLength: 20, nullable: true),
-                    address = table.Column<string>(type: "character varying(255)", maxLength: 255, nullable: true),
-                    role_id = table.Column<int>(type: "integer", nullable: false),
-                    status = table.Column<string>(type: "character varying(20)", maxLength: 20, nullable: false),
-                    created_at = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
+                    user_id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    full_name = table.Column<string>(type: "TEXT", maxLength: 100, nullable: false),
+                    email = table.Column<string>(type: "TEXT", maxLength: 100, nullable: false),
+                    password = table.Column<string>(type: "TEXT", maxLength: 255, nullable: false),
+                    phone = table.Column<string>(type: "TEXT", maxLength: 20, nullable: true),
+                    address = table.Column<string>(type: "TEXT", maxLength: 255, nullable: true),
+                    role_id = table.Column<int>(type: "INTEGER", nullable: false),
+                    status = table.Column<string>(type: "TEXT", maxLength: 20, nullable: false),
+                    created_at = table.Column<DateTime>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -83,18 +82,18 @@ namespace Backend_CycleTrust.DAL.Migrations
                 name: "bikes",
                 columns: table => new
                 {
-                    bike_id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    seller_id = table.Column<int>(type: "integer", nullable: false),
-                    title = table.Column<string>(type: "character varying(255)", maxLength: 255, nullable: false),
-                    description = table.Column<string>(type: "text", nullable: true),
-                    price = table.Column<decimal>(type: "numeric(12,2)", nullable: false),
-                    brand_id = table.Column<int>(type: "integer", nullable: true),
-                    category_id = table.Column<int>(type: "integer", nullable: true),
-                    frame_size = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: true),
-                    bike_condition = table.Column<string>(type: "character varying(20)", maxLength: 20, nullable: true),
-                    status = table.Column<string>(type: "character varying(20)", maxLength: 20, nullable: false),
-                    created_at = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
+                    bike_id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    seller_id = table.Column<int>(type: "INTEGER", nullable: false),
+                    title = table.Column<string>(type: "TEXT", maxLength: 255, nullable: false),
+                    description = table.Column<string>(type: "TEXT", nullable: true),
+                    price = table.Column<decimal>(type: "decimal(12,2)", nullable: false),
+                    brand_id = table.Column<int>(type: "INTEGER", nullable: true),
+                    category_id = table.Column<int>(type: "INTEGER", nullable: true),
+                    frame_size = table.Column<string>(type: "TEXT", maxLength: 50, nullable: true),
+                    bike_condition = table.Column<string>(type: "TEXT", maxLength: 20, nullable: true),
+                    status = table.Column<string>(type: "TEXT", maxLength: 20, nullable: false),
+                    created_at = table.Column<DateTime>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -123,10 +122,10 @@ namespace Backend_CycleTrust.DAL.Migrations
                 name: "bike_images",
                 columns: table => new
                 {
-                    image_id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    bike_id = table.Column<int>(type: "integer", nullable: false),
-                    image_url = table.Column<string>(type: "character varying(500)", maxLength: 500, nullable: false)
+                    image_id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    bike_id = table.Column<int>(type: "INTEGER", nullable: false),
+                    image_url = table.Column<string>(type: "TEXT", maxLength: 500, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -143,17 +142,17 @@ namespace Backend_CycleTrust.DAL.Migrations
                 name: "inspection_reports",
                 columns: table => new
                 {
-                    report_id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    bike_id = table.Column<int>(type: "integer", nullable: false),
-                    inspector_id = table.Column<int>(type: "integer", nullable: false),
-                    frame_condition = table.Column<string>(type: "text", nullable: true),
-                    brake_condition = table.Column<string>(type: "text", nullable: true),
-                    drivetrain_condition = table.Column<string>(type: "text", nullable: true),
-                    overall_comment = table.Column<string>(type: "text", nullable: true),
-                    report_file = table.Column<string>(type: "character varying(500)", maxLength: 500, nullable: true),
-                    inspection_status = table.Column<string>(type: "character varying(20)", maxLength: 20, nullable: false),
-                    inspected_at = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
+                    report_id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    bike_id = table.Column<int>(type: "INTEGER", nullable: false),
+                    inspector_id = table.Column<int>(type: "INTEGER", nullable: false),
+                    frame_condition = table.Column<string>(type: "TEXT", nullable: true),
+                    brake_condition = table.Column<string>(type: "TEXT", nullable: true),
+                    drivetrain_condition = table.Column<string>(type: "TEXT", nullable: true),
+                    overall_comment = table.Column<string>(type: "TEXT", nullable: true),
+                    report_file = table.Column<string>(type: "TEXT", maxLength: 500, nullable: true),
+                    inspection_status = table.Column<string>(type: "TEXT", maxLength: 20, nullable: false),
+                    inspected_at = table.Column<DateTime>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -176,13 +175,13 @@ namespace Backend_CycleTrust.DAL.Migrations
                 name: "messages",
                 columns: table => new
                 {
-                    message_id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    sender_id = table.Column<int>(type: "integer", nullable: false),
-                    receiver_id = table.Column<int>(type: "integer", nullable: false),
-                    bike_id = table.Column<int>(type: "integer", nullable: true),
-                    content = table.Column<string>(type: "text", nullable: false),
-                    sent_at = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
+                    message_id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    sender_id = table.Column<int>(type: "INTEGER", nullable: false),
+                    receiver_id = table.Column<int>(type: "INTEGER", nullable: false),
+                    bike_id = table.Column<int>(type: "INTEGER", nullable: true),
+                    content = table.Column<string>(type: "TEXT", nullable: false),
+                    sent_at = table.Column<DateTime>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -211,15 +210,15 @@ namespace Backend_CycleTrust.DAL.Migrations
                 name: "orders",
                 columns: table => new
                 {
-                    order_id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    bike_id = table.Column<int>(type: "integer", nullable: false),
-                    buyer_id = table.Column<int>(type: "integer", nullable: false),
-                    seller_id = table.Column<int>(type: "integer", nullable: false),
-                    total_amount = table.Column<decimal>(type: "numeric(12,2)", nullable: false),
-                    deposit_amount = table.Column<decimal>(type: "numeric(12,2)", nullable: true),
-                    status = table.Column<string>(type: "character varying(20)", maxLength: 20, nullable: false),
-                    created_at = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
+                    order_id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    bike_id = table.Column<int>(type: "INTEGER", nullable: false),
+                    buyer_id = table.Column<int>(type: "INTEGER", nullable: false),
+                    seller_id = table.Column<int>(type: "INTEGER", nullable: false),
+                    total_amount = table.Column<decimal>(type: "decimal(12,2)", nullable: false),
+                    deposit_amount = table.Column<decimal>(type: "decimal(12,2)", nullable: true),
+                    status = table.Column<string>(type: "TEXT", maxLength: 20, nullable: false),
+                    created_at = table.Column<DateTime>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -248,13 +247,13 @@ namespace Backend_CycleTrust.DAL.Migrations
                 name: "reports",
                 columns: table => new
                 {
-                    report_id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    reporter_id = table.Column<int>(type: "integer", nullable: false),
-                    bike_id = table.Column<int>(type: "integer", nullable: true),
-                    reason = table.Column<string>(type: "text", nullable: false),
-                    status = table.Column<string>(type: "character varying(20)", maxLength: 20, nullable: false),
-                    created_at = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
+                    report_id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    reporter_id = table.Column<int>(type: "INTEGER", nullable: false),
+                    bike_id = table.Column<int>(type: "INTEGER", nullable: true),
+                    reason = table.Column<string>(type: "TEXT", nullable: false),
+                    status = table.Column<string>(type: "TEXT", maxLength: 20, nullable: false),
+                    created_at = table.Column<DateTime>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -277,11 +276,11 @@ namespace Backend_CycleTrust.DAL.Migrations
                 name: "wishlist",
                 columns: table => new
                 {
-                    wishlist_id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    buyer_id = table.Column<int>(type: "integer", nullable: false),
-                    bike_id = table.Column<int>(type: "integer", nullable: false),
-                    created_at = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
+                    wishlist_id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    buyer_id = table.Column<int>(type: "INTEGER", nullable: false),
+                    bike_id = table.Column<int>(type: "INTEGER", nullable: false),
+                    created_at = table.Column<DateTime>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -304,14 +303,14 @@ namespace Backend_CycleTrust.DAL.Migrations
                 name: "reviews",
                 columns: table => new
                 {
-                    review_id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    order_id = table.Column<int>(type: "integer", nullable: false),
-                    buyer_id = table.Column<int>(type: "integer", nullable: false),
-                    seller_id = table.Column<int>(type: "integer", nullable: false),
-                    rating = table.Column<int>(type: "integer", nullable: true),
-                    comment = table.Column<string>(type: "text", nullable: true),
-                    created_at = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
+                    review_id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    order_id = table.Column<int>(type: "INTEGER", nullable: false),
+                    buyer_id = table.Column<int>(type: "INTEGER", nullable: false),
+                    seller_id = table.Column<int>(type: "INTEGER", nullable: false),
+                    rating = table.Column<int>(type: "INTEGER", nullable: true),
+                    comment = table.Column<string>(type: "TEXT", nullable: true),
+                    created_at = table.Column<DateTime>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -337,6 +336,30 @@ namespace Backend_CycleTrust.DAL.Migrations
                 });
 
             migrationBuilder.InsertData(
+                table: "brands",
+                columns: new[] { "brand_id", "brand_name" },
+                values: new object[,]
+                {
+                    { 1, "Giant" },
+                    { 2, "Trek" },
+                    { 3, "Specialized" },
+                    { 4, "Cannondale" },
+                    { 5, "Merida" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "categories",
+                columns: new[] { "category_id", "category_name" },
+                values: new object[,]
+                {
+                    { 1, "Road Bike" },
+                    { 2, "Mountain Bike" },
+                    { 3, "City Bike" },
+                    { 4, "Folding Bike" },
+                    { 5, "Electric Bike" }
+                });
+
+            migrationBuilder.InsertData(
                 table: "roles",
                 columns: new[] { "role_id", "role_name" },
                 values: new object[,]
@@ -346,6 +369,70 @@ namespace Backend_CycleTrust.DAL.Migrations
                     { 3, "SELLER" },
                     { 4, "INSPECTOR" }
                 });
+
+            migrationBuilder.InsertData(
+                table: "users",
+                columns: new[] { "user_id", "address", "created_at", "email", "full_name", "password", "phone", "role_id", "status" },
+                values: new object[,]
+                {
+                    { 1, "Ho Chi Minh City", new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), "admin@cycletrust.com", "Admin CycleTrust", "$2a$11$VhQo3xikBLmFMVGM3U0kYOHGlhwtAPrwjjZV4WJmkjmoqm8SuC4Pu", "0901000001", 1, "ACTIVE" },
+                    { 2, "Ha Noi", new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), "buyer@cycletrust.com", "Nguyen Van Buyer", "$2a$11$Gtt/lWpnPzDa/VVmR/fYm.rl9lzFFlpuhxY7ExHZd1huXudhQMHqm", "0901000002", 2, "ACTIVE" },
+                    { 3, "Da Nang", new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), "seller@cycletrust.com", "Tran Thi Seller", "$2a$11$tBkwBXLD4x16.MkVgIvUjuuWGUQNgUhyulVRNRc8Ps2.Rb4A6Qdsm", "0901000003", 3, "ACTIVE" },
+                    { 4, "Ho Chi Minh City", new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), "inspector@cycletrust.com", "Le Van Inspector", "$2a$11$QPwNKuIisbgosdAq.f.xdeEncp0Wpq4mGP2VQCkmcSyEZVg8GO/ba", "0901000004", 4, "ACTIVE" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "bikes",
+                columns: new[] { "bike_id", "bike_condition", "brand_id", "category_id", "created_at", "description", "frame_size", "price", "seller_id", "status", "title" },
+                values: new object[,]
+                {
+                    { 1, "USED_LIKE_NEW", 1, 1, new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), "Xe đạp đường trường Giant Contend AR 1, khung nhôm nhẹ, groupset Shimano 105.", "M", 25000000m, 3, "APPROVED", "Giant Contend AR 1 2025" },
+                    { 2, "USED_GOOD", 2, 2, new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), "Xe đạp leo núi Trek Marlin 7, phuộc RockShox, 27.5 inch.", "L", 18000000m, 3, "APPROVED", "Trek Marlin 7 2024" },
+                    { 3, "NEW", 3, 3, new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), "Xe đạp thành phố cao cấp, khung carbon, phù hợp đi làm và tập luyện.", "M", 35000000m, 3, "PENDING", "Specialized Sirrus X 4.0" },
+                    { 4, "USED_FAIR", 4, 3, new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), "Xe đạp fitness nhẹ, phù hợp di chuyển hàng ngày trong thành phố.", "S", 12000000m, 3, "APPROVED", "Cannondale Quick 5" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "inspection_reports",
+                columns: new[] { "report_id", "bike_id", "brake_condition", "drivetrain_condition", "frame_condition", "inspected_at", "inspection_status", "inspector_id", "overall_comment", "report_file" },
+                values: new object[,]
+                {
+                    { 1, 1, "Phanh đĩa hoạt động tốt.", "Hệ thống truyền động Shimano 105 mượt mà.", "Khung nhôm còn mới, không trầy xước.", new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), "APPROVED", 4, "Xe trong tình trạng rất tốt, đạt tiêu chuẩn.", null },
+                    { 2, 2, "Phanh cần điều chỉnh lại.", "Xích hơi giãn, cần thay sớm.", "Khung nhôm có vài vết trầy nhỏ.", new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), "APPROVED", 4, "Xe ổn, cần bảo dưỡng nhẹ.", null }
+                });
+
+            migrationBuilder.InsertData(
+                table: "messages",
+                columns: new[] { "message_id", "bike_id", "content", "receiver_id", "sender_id", "sent_at" },
+                values: new object[,]
+                {
+                    { 1, 2, "Chào bạn, xe Trek Marlin 7 còn không ạ?", 3, 2, new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc) },
+                    { 2, 2, "Chào bạn, xe vẫn còn nhé. Bạn muốn xem trực tiếp không?", 2, 3, new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc) }
+                });
+
+            migrationBuilder.InsertData(
+                table: "orders",
+                columns: new[] { "order_id", "bike_id", "buyer_id", "created_at", "deposit_amount", "seller_id", "status", "total_amount" },
+                values: new object[,]
+                {
+                    { 1, 1, 2, new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), 5000000m, 3, "COMPLETED", 25000000m },
+                    { 2, 4, 2, new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), 2000000m, 3, "PENDING", 12000000m }
+                });
+
+            migrationBuilder.InsertData(
+                table: "reports",
+                columns: new[] { "report_id", "bike_id", "created_at", "reason", "reporter_id", "status" },
+                values: new object[] { 1, 3, new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), "Giá niêm yết không hợp lý so với tình trạng xe.", 2, "PENDING" });
+
+            migrationBuilder.InsertData(
+                table: "wishlist",
+                columns: new[] { "wishlist_id", "bike_id", "buyer_id", "created_at" },
+                values: new object[] { 1, 2, 2, new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc) });
+
+            migrationBuilder.InsertData(
+                table: "reviews",
+                columns: new[] { "review_id", "buyer_id", "comment", "created_at", "order_id", "rating", "seller_id" },
+                values: new object[] { 1, 2, "Xe rất đẹp, đúng mô tả. Seller giao hàng nhanh!", new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), 1, 5, 3 });
 
             migrationBuilder.CreateIndex(
                 name: "IX_bike_images_bike_id",

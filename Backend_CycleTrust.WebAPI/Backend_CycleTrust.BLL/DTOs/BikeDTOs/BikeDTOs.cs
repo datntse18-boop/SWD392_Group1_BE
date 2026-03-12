@@ -1,3 +1,5 @@
+using Microsoft.AspNetCore.Http;
+
 namespace Backend_CycleTrust.BLL.DTOs.BikeDTOs
 {
     public class CreateBikeDto
@@ -10,6 +12,9 @@ namespace Backend_CycleTrust.BLL.DTOs.BikeDTOs
         public int? CategoryId { get; set; }
         public string? FrameSize { get; set; }
         public string? BikeCondition { get; set; }
+        public List<string>? ImageUrls { get; set; }
+        public List<IFormFile>? ImageFiles { get; set; }
+        public bool IsAnonymous { get; set; }
     }
 
     public class UpdateBikeDto
@@ -22,6 +27,9 @@ namespace Backend_CycleTrust.BLL.DTOs.BikeDTOs
         public string? FrameSize { get; set; }
         public string? BikeCondition { get; set; }
         public string? Status { get; set; }
+        public List<string>? ImageUrls { get; set; }
+        public List<IFormFile>? ImageFiles { get; set; }
+        public bool IsAnonymous { get; set; }
     }
 
     public class BikeResponseDto
@@ -39,6 +47,7 @@ namespace Backend_CycleTrust.BLL.DTOs.BikeDTOs
         public string? FrameSize { get; set; }
         public string? BikeCondition { get; set; }
         public string Status { get; set; } = null!;
+        public bool IsAnonymous { get; set; }
         public DateTime CreatedAt { get; set; }
         public List<string> ImageUrls { get; set; } = new();
     }

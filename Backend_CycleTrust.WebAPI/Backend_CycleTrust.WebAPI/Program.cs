@@ -19,7 +19,7 @@ namespace Backend_CycleTrust.WebAPI
 
             // ===== DbContext =====
             builder.Services.AddDbContext<CycleTrustDbContext>(options =>
-                options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+                options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
 
             // ===== Repositories =====
             builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
@@ -146,6 +146,19 @@ namespace Backend_CycleTrust.WebAPI
                 app.UseSwagger();
                 app.UseSwaggerUI();
             }
+
+            // Create uploads directory if it doesn't exist
+            var uploadsPath = Path.Combine(builder.Environment.ContentRootPath, "uploads");
+            if (!Directory.Exists(uploadsPath))
+            {
+                Directory.CreateDirectory(uploadsPath);
+            }
+
+            app.UseStaticFiles(new StaticFileOptions
+            {
+                FileProvider = new Microsoft.Extensions.FileProviders.PhysicalFileProvider(uploadsPath),
+                RequestPath = "/uploads"
+            });
 
             app.UseHttpsRedirection();
             app.UseCors("AllowAll");

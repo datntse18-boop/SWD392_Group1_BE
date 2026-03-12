@@ -31,14 +31,14 @@ namespace Backend_CycleTrust.WebAPI.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<BikeResponseDto>> Create(CreateBikeDto dto)
+        public async Task<ActionResult<BikeResponseDto>> Create([FromForm] CreateBikeDto dto)
         {
             var bike = await _bikeService.CreateAsync(dto);
             return CreatedAtAction(nameof(GetById), new { id = bike.BikeId }, bike);
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update(int id, UpdateBikeDto dto)
+        public async Task<IActionResult> Update(int id, [FromForm] UpdateBikeDto dto)
         {
             var result = await _bikeService.UpdateAsync(id, dto);
             if (!result) return NotFound();

@@ -41,6 +41,9 @@ namespace Backend_CycleTrust.DAL.Entities
         [Column("status")]
         public BikeStatus Status { get; set; } = BikeStatus.PENDING;
 
+        [Column("is_anonymous")]
+        public bool IsAnonymous { get; set; } = false;
+
         [Column("created_at")]
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
