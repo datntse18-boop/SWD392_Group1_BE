@@ -80,7 +80,8 @@ namespace Backend_CycleTrust.BLL.Services
             var existingActiveOrder = await _context.Orders.AnyAsync(o =>
                 o.BikeId == dto.BikeId
                 && o.Status != OrderStatus.CANCELLED
-                && o.Status != OrderStatus.COMPLETED);
+                && o.Status != OrderStatus.COMPLETED
+                && o.Status != OrderStatus.RECEIVED);
 
             if (existingActiveOrder)
                 throw new InvalidOperationException("Xe này đã có đơn hàng đang xử lý.");
@@ -127,10 +128,10 @@ namespace Backend_CycleTrust.BLL.Services
             if (order.BuyerId != buyerId)
                 throw new InvalidOperationException("Only the buyer of this order can confirm receiving the bike.");
 
-            if (order.Status != OrderStatus.DEPOSITED)
-                throw new InvalidOperationException("Only deposited orders can be marked as completed.");
+            if (order.Status != OrderStatus.DEPOSITED && order.Status != OrderStatus.COMPLETED)
+                throw new InvalidOperationException("Only deposited orders can be marked as received.");
 
-            order.Status = OrderStatus.COMPLETED;
+            order.Status = OrderStatus.RECEIVED;
             await _context.SaveChangesAsync();
             return true;
         }

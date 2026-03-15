@@ -30,6 +30,9 @@ namespace Backend_CycleTrust.BLL.Services
             if (order.Status == OrderStatus.COMPLETED)
                 throw new InvalidOperationException("Completed order cannot be paid.");
 
+            if (order.Status == OrderStatus.RECEIVED)
+                throw new InvalidOperationException("Received order cannot be paid.");
+
             if (order.Status == OrderStatus.DEPOSITED)
             {
                 return new PaymentResponseDto

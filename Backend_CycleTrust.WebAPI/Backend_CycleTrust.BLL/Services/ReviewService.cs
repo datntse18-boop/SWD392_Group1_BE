@@ -2,6 +2,7 @@ using Backend_CycleTrust.BLL.DTOs.ReviewDTOs;
 using Backend_CycleTrust.BLL.Interfaces;
 using Backend_CycleTrust.DAL.Data;
 using Backend_CycleTrust.DAL.Entities;
+using Backend_CycleTrust.DAL.Enums;
 using Microsoft.EntityFrameworkCore;
 
 namespace Backend_CycleTrust.BLL.Services
@@ -60,6 +61,30 @@ namespace Backend_CycleTrust.BLL.Services
 
         public async Task<ReviewResponseDto> CreateAsync(CreateReviewDto dto)
         {
+            var order = await _context.Orders
+                .FirstOrDefaultAsync(o => o.OrderId == dto.OrderId);
+
+            if (order == null)
+                throw new InvalidOperationException("Order not found.");
+
+            if (order.BuyerId != dto.BuyerId)
+                throw new InvalidOperationException("Buyer does not match this order.");
+
+            if (order.SellerId != dto.SellerId)
+                throw new InvalidOperationException("Seller does not match this order.");
+
+            if (order.Status != OrderStatus.RECEIVED && order.Status != OrderStatus.COMPLETED)
+                throw new InvalidOperationException("Review is only allowed after order completion.");
+
+            var alreadyReviewed = await _context.Reviews.AnyAsync(r =>
+                r.OrderId == dto.OrderId && r.BuyerId == dto.BuyerId);
+
+            if (alreadyReviewed)
+                throw new InvalidOperationException("You have already reviewed this order.");
+
+            if (dto.Rating.HasValue && (dto.Rating < 1 || dto.Rating > 5))
+                throw new InvalidOperationException("Rating must be between 1 and 5.");
+
             var review = new Review
             {
                 OrderId = dto.OrderId,
@@ -76,10 +101,16 @@ namespace Backend_CycleTrust.BLL.Services
             return await GetByIdAsync(review.ReviewId) ?? throw new Exception("Failed to create review");
         }
 
-        public async Task<bool> UpdateAsync(int id, UpdateReviewDto dto)
+        public async Task<bool> UpdateAsync(int id, UpdateReviewDto dto, int actorUserId, bool isAdmin = false)
         {
             var review = await _context.Reviews.FindAsync(id);
             if (review == null) return false;
+
+            if (!isAdmin && review.BuyerId != actorUserId)
+                throw new InvalidOperationException("You can only edit your own review.");
+
+            if (dto.Rating.HasValue && (dto.Rating < 1 || dto.Rating > 5))
+                throw new InvalidOperationException("Rating must be between 1 and 5.");
 
             review.Rating = dto.Rating;
             review.Comment = dto.Comment;
@@ -88,10 +119,13 @@ namespace Backend_CycleTrust.BLL.Services
             return true;
         }
 
-        public async Task<bool> DeleteAsync(int id)
+        public async Task<bool> DeleteAsync(int id, int actorUserId, bool isAdmin = false)
         {
             var review = await _context.Reviews.FindAsync(id);
             if (review == null) return false;
+
+            if (!isAdmin && review.BuyerId != actorUserId)
+                throw new InvalidOperationException("You can only delete your own review.");
 
             _context.Reviews.Remove(review);
             await _context.SaveChangesAsync();

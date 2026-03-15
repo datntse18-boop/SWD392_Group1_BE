@@ -2,6 +2,7 @@ using Backend_CycleTrust.BLL.DTOs.ReviewDTOs;
 using Backend_CycleTrust.BLL.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace Backend_CycleTrust.WebAPI.Controllers
 {
@@ -39,25 +40,59 @@ namespace Backend_CycleTrust.WebAPI.Controllers
         [HttpPost]
         public async Task<ActionResult<ReviewResponseDto>> Create(CreateReviewDto dto)
         {
-            var review = await _reviewService.CreateAsync(dto);
-            return CreatedAtAction(nameof(GetById), new { id = review.ReviewId }, review);
+            try
+            {
+                var review = await _reviewService.CreateAsync(dto);
+                return CreatedAtAction(nameof(GetById), new { id = review.ReviewId }, review);
+            }
+            catch (InvalidOperationException ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
         }
 
+        [Authorize(Roles = "BUYER,ADMIN")]
         [HttpPut("{id}")]
         public async Task<IActionResult> Update(int id, UpdateReviewDto dto)
         {
-            var result = await _reviewService.UpdateAsync(id, dto);
-            if (!result) return NotFound();
-            return NoContent();
+            var userIdClaim = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (string.IsNullOrEmpty(userIdClaim) || !int.TryParse(userIdClaim, out var actorUserId))
+                return Unauthorized(new { message = "Invalid token: user ID not found." });
+
+            var isAdmin = User.IsInRole("ADMIN");
+
+            try
+            {
+                var result = await _reviewService.UpdateAsync(id, dto, actorUserId, isAdmin);
+                if (!result) return NotFound();
+                return NoContent();
+            }
+            catch (InvalidOperationException ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
         }
 
-        [Authorize(Roles = "ADMIN")]
+        [Authorize(Roles = "BUYER,ADMIN")]
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
-            var result = await _reviewService.DeleteAsync(id);
-            if (!result) return NotFound();
-            return NoContent();
+            var userIdClaim = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (string.IsNullOrEmpty(userIdClaim) || !int.TryParse(userIdClaim, out var actorUserId))
+                return Unauthorized(new { message = "Invalid token: user ID not found." });
+
+            var isAdmin = User.IsInRole("ADMIN");
+
+            try
+            {
+                var result = await _reviewService.DeleteAsync(id, actorUserId, isAdmin);
+                if (!result) return NotFound();
+                return NoContent();
+            }
+            catch (InvalidOperationException ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
         }
     }
 }

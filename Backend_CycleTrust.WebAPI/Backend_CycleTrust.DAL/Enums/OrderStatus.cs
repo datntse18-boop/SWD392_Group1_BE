@@ -5,6 +5,7 @@ namespace Backend_CycleTrust.DAL.Enums
         PENDING,
         DEPOSITED,
         COMPLETED,
+        RECEIVED,
         CANCELLED
     }
 }

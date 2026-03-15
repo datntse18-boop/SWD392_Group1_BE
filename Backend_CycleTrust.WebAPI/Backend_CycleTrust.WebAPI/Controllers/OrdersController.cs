@@ -60,8 +60,8 @@ namespace Backend_CycleTrust.WebAPI.Controllers
         }
 
         [Authorize(Roles = "BUYER")]
-        [HttpPut("{id}/received")]
-        public async Task<IActionResult> MarkAsReceived(int id)
+        [HttpPut("confirm-received/{id}")]
+        public async Task<IActionResult> ConfirmReceived(int id)
         {
             var buyerIdClaim = User.FindFirstValue(ClaimTypes.NameIdentifier);
             if (string.IsNullOrEmpty(buyerIdClaim) || !int.TryParse(buyerIdClaim, out var buyerId))
@@ -77,6 +77,13 @@ namespace Backend_CycleTrust.WebAPI.Controllers
             {
                 return BadRequest(new { message = ex.Message });
             }
+        }
+
+        [Authorize(Roles = "BUYER")]
+        [HttpPut("{id}/received")]
+        public async Task<IActionResult> MarkAsReceived(int id)
+        {
+            return await ConfirmReceived(id);
         }
 
         [Authorize(Roles = "ADMIN")]
