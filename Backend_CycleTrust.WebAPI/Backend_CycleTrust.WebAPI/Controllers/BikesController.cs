@@ -95,6 +95,42 @@ namespace Backend_CycleTrust.WebAPI.Controllers
                 return BadRequest(new { message = ex.Message });
             }
         }
+
+        [HttpDelete("{id}/images")]
+        public async Task<IActionResult> DeleteImage(int id, [FromQuery] string imageUrl)
+        {
+            if (string.IsNullOrEmpty(imageUrl))
+            {
+                return BadRequest(new { message = "Image URL is required." });
+            }
+
+            try
+            {
+                var bike = await _bikeService.GetByIdAsync(id);
+                if (bike == null) return NotFound(new { message = "Bike not found." });
+
+                // Try to delete from Cloudinary
+                var cloudinaryDeleted = await _cloudinaryService.DeleteImageAsync(imageUrl);
+                if (!cloudinaryDeleted)
+                {
+                    _logger.LogWarning("Failed to delete image from Cloudinary or URL parsing failed. Proceeding with DB deletion. URL: {Url}", imageUrl);
+                }
+
+                // Delete from DB
+                var dbDeleted = await _bikeImageService.DeleteByUrlAsync(id, imageUrl);
+                if (!dbDeleted)
+                {
+                    return NotFound(new { message = "Image not found in database for this bike." });
+                }
+
+                return Ok(new { message = "Image deleted successfully." });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error deleting image for bike {BikeId}, URL {Url}: {Message}", id, imageUrl, ex.Message);
+                return BadRequest(new { message = ex.Message });
+            }
+        }
         // ===== Admin: Approve / Reject Listing (FR-13) =====
         [Authorize(Roles = "ADMIN")]
         [HttpPut("{id}/approve")]

@@ -2,6 +2,7 @@ using Backend_CycleTrust.BLL.DTOs.BikeImageDTOs;
 using Backend_CycleTrust.BLL.Interfaces;
 using Backend_CycleTrust.DAL.Entities;
 using Backend_CycleTrust.DAL.Interfaces;
+using Microsoft.EntityFrameworkCore;
 
 namespace Backend_CycleTrust.BLL.Services
 {
@@ -57,6 +58,19 @@ namespace Backend_CycleTrust.BLL.Services
         {
             var image = await _repository.GetByIdAsync(id);
             if (image == null) return false;
+            await _repository.DeleteAsync(image);
+            return true;
+        }
+
+        public async Task<bool> DeleteByUrlAsync(int bikeId, string imageUrl)
+        {
+            // _repository is generic, so we can access Context but it's cleaner if we had specific repo.
+            // However we can fetch all and filter since images are few per bike, or use raw if exposed.
+            var images = await _repository.GetAllAsync();
+            var image = images.FirstOrDefault(i => i.BikeId == bikeId && i.ImageUrl == imageUrl);
+            
+            if (image == null) return false;
+            
             await _repository.DeleteAsync(image);
             return true;
         }
