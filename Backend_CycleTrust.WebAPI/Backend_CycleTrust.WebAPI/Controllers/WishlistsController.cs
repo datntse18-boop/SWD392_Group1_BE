@@ -1,11 +1,13 @@
 using Backend_CycleTrust.BLL.DTOs.WishlistDTOs;
 using Backend_CycleTrust.BLL.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Backend_CycleTrust.WebAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(Roles = "BUYER")]
     public class WishlistsController : ControllerBase
     {
         private readonly IWishlistService _wishlistService;

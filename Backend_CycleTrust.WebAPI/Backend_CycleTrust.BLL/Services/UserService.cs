@@ -31,7 +31,8 @@ namespace Backend_CycleTrust.BLL.Services
                     RoleId = u.RoleId,
                     RoleName = u.Role.RoleName,
                     Status = u.Status.ToString(),
-                    CreatedAt = u.CreatedAt
+                    CreatedAt = u.CreatedAt,
+                    PendingSellerUpgrade = u.PendingSellerUpgrade
                 })
                 .ToListAsync();
         }
@@ -104,6 +105,33 @@ namespace Backend_CycleTrust.BLL.Services
             if (Enum.TryParse<UserStatus>(dto.Status, out var status))
                 user.Status = status;
 
+            await _context.SaveChangesAsync();
+            return true;
+        }
+
+        public async Task<bool> UpdateRoleAsync(int userId, int newRoleId)
+        {
+            var user = await _context.Users.FindAsync(userId);
+            if (user == null) return false;
+
+            var roleExists = await _context.Roles.AnyAsync(r => r.RoleId == newRoleId);
+            if (!roleExists) return false;
+
+            user.RoleId = newRoleId;
+            user.PendingSellerUpgrade = false; // Reset if approved/changed
+            await _context.SaveChangesAsync();
+            return true;
+        }
+
+        public async Task<bool> RequestSellerRoleAsync(int userId)
+        {
+            var user = await _context.Users.FindAsync(userId);
+            if (user == null) return false;
+
+            // Only allow standard buyers to request
+            if (user.RoleId != 2) return false;
+
+            user.PendingSellerUpgrade = true;
             await _context.SaveChangesAsync();
             return true;
         }

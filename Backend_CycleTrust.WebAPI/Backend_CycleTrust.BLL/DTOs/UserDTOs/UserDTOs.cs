@@ -31,5 +31,11 @@ namespace Backend_CycleTrust.BLL.DTOs.UserDTOs
         public string? RoleName { get; set; }
         public string Status { get; set; } = null!;
         public DateTime CreatedAt { get; set; }
+        public bool PendingSellerUpgrade { get; set; }
+    }
+
+    public class UpdateUserRoleDto
+    {
+        public int RoleId { get; set; }
     }
 }

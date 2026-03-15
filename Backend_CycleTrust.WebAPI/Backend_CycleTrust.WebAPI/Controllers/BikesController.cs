@@ -1,5 +1,6 @@
 using Backend_CycleTrust.BLL.DTOs.BikeDTOs;
 using Backend_CycleTrust.BLL.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Backend_CycleTrust.WebAPI.Controllers
@@ -15,6 +16,10 @@ namespace Backend_CycleTrust.WebAPI.Controllers
             _bikeService = bikeService;
         }
 
+        /// <summary>
+        /// Lấy danh sách tất cả xe (public).
+        /// </summary>
+        [AllowAnonymous]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<BikeResponseDto>>> GetAll()
         {
@@ -22,6 +27,10 @@ namespace Backend_CycleTrust.WebAPI.Controllers
             return Ok(bikes);
         }
 
+        /// <summary>
+        /// Lấy xe theo ID (public).
+        /// </summary>
+        [AllowAnonymous]
         [HttpGet("{id}")]
         public async Task<ActionResult<BikeResponseDto>> GetById(int id)
         {
@@ -30,6 +39,10 @@ namespace Backend_CycleTrust.WebAPI.Controllers
             return Ok(bike);
         }
 
+        /// <summary>
+        /// Seller tạo listing mới (status mặc định = PENDING).
+        /// </summary>
+        [Authorize(Roles = "SELLER")]
         [HttpPost]
         public async Task<ActionResult<BikeResponseDto>> Create(CreateBikeDto dto)
         {
@@ -37,6 +50,10 @@ namespace Backend_CycleTrust.WebAPI.Controllers
             return CreatedAtAction(nameof(GetById), new { id = bike.BikeId }, bike);
         }
 
+        /// <summary>
+        /// Admin duyệt/từ chối listing hoặc Seller chỉnh sửa listing.
+        /// </summary>
+        [Authorize(Roles = "ADMIN,SELLER")]
         [HttpPut("{id}")]
         public async Task<IActionResult> Update(int id, UpdateBikeDto dto)
         {
@@ -45,6 +62,7 @@ namespace Backend_CycleTrust.WebAPI.Controllers
             return NoContent();
         }
 
+        [Authorize(Roles = "ADMIN")]
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {

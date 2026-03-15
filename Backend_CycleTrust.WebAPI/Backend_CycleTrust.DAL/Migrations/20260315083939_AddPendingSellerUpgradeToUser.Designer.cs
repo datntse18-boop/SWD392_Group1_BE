@@ -3,6 +3,7 @@ using System;
 using Backend_CycleTrust.DAL.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Backend_CycleTrust.DAL.Migrations
 {
     [DbContext(typeof(CycleTrustDbContext))]
-    partial class CycleTrustDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260315083939_AddPendingSellerUpgradeToUser")]
+    partial class AddPendingSellerUpgradeToUser
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -679,10 +682,6 @@ namespace Backend_CycleTrust.DAL.Migrations
                         .HasColumnType("character varying(255)")
                         .HasColumnName("password");
 
-                    b.Property<bool>("PendingSellerUpgrade")
-                        .HasColumnType("boolean")
-                        .HasColumnName("pending_seller_upgrade");
-
                     b.Property<string>("Phone")
                         .HasMaxLength(20)
                         .HasColumnType("character varying(20)")
@@ -716,7 +715,6 @@ namespace Backend_CycleTrust.DAL.Migrations
                             Email = "admin@cycletrust.com",
                             FullName = "Admin CycleTrust",
                             Password = "$2a$11$VhQo3xikBLmFMVGM3U0kYOHGlhwtAPrwjjZV4WJmkjmoqm8SuC4Pu",
-                            PendingSellerUpgrade = false,
                             Phone = "0901000001",
                             RoleId = 1,
                             Status = "ACTIVE"
@@ -729,7 +727,6 @@ namespace Backend_CycleTrust.DAL.Migrations
                             Email = "buyer@cycletrust.com",
                             FullName = "Nguyen Van Buyer",
                             Password = "$2a$11$Gtt/lWpnPzDa/VVmR/fYm.rl9lzFFlpuhxY7ExHZd1huXudhQMHqm",
-                            PendingSellerUpgrade = false,
                             Phone = "0901000002",
                             RoleId = 2,
                             Status = "ACTIVE"
@@ -742,7 +739,6 @@ namespace Backend_CycleTrust.DAL.Migrations
                             Email = "seller@cycletrust.com",
                             FullName = "Tran Thi Seller",
                             Password = "$2a$11$tBkwBXLD4x16.MkVgIvUjuuWGUQNgUhyulVRNRc8Ps2.Rb4A6Qdsm",
-                            PendingSellerUpgrade = false,
                             Phone = "0901000003",
                             RoleId = 3,
                             Status = "ACTIVE"
@@ -755,7 +751,6 @@ namespace Backend_CycleTrust.DAL.Migrations
                             Email = "inspector@cycletrust.com",
                             FullName = "Le Van Inspector",
                             Password = "$2a$11$QPwNKuIisbgosdAq.f.xdeEncp0Wpq4mGP2VQCkmcSyEZVg8GO/ba",
-                            PendingSellerUpgrade = false,
                             Phone = "0901000004",
                             RoleId = 4,
                             Status = "ACTIVE"

@@ -67,6 +67,16 @@ namespace Backend_CycleTrust.BLL.Services
 
         public async Task<OrderResponseDto> CreateAsync(CreateOrderDto dto)
         {
+            // Validate buyer has BUYER role (roleId=2)
+            var buyer = await _context.Users.FindAsync(dto.BuyerId);
+            if (buyer == null || buyer.RoleId != 2)
+                throw new InvalidOperationException("Chỉ user có role BUYER mới được tạo đơn hàng.");
+
+            // Validate bike is APPROVED
+            var bike = await _context.Bikes.FindAsync(dto.BikeId);
+            if (bike == null || bike.Status != BikeStatus.APPROVED)
+                throw new InvalidOperationException("Chỉ xe có trạng thái APPROVED mới được đặt hàng.");
+
             var order = new Order
             {
                 BikeId = dto.BikeId,

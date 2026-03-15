@@ -1,11 +1,13 @@
 using Backend_CycleTrust.BLL.DTOs.MessageDTOs;
 using Backend_CycleTrust.BLL.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Backend_CycleTrust.WebAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class MessagesController : ControllerBase
     {
         private readonly IMessageService _messageService;
@@ -37,6 +39,7 @@ namespace Backend_CycleTrust.WebAPI.Controllers
             return CreatedAtAction(nameof(GetById), new { id = message.MessageId }, message);
         }
 
+        [Authorize(Roles = "ADMIN")]
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {

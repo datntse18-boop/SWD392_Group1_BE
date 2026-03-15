@@ -1,11 +1,13 @@
 using Backend_CycleTrust.BLL.DTOs.ReviewDTOs;
 using Backend_CycleTrust.BLL.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Backend_CycleTrust.WebAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class ReviewsController : ControllerBase
     {
         private readonly IReviewService _reviewService;
@@ -30,6 +32,10 @@ namespace Backend_CycleTrust.WebAPI.Controllers
             return Ok(review);
         }
 
+        /// <summary>
+        /// Buyer tạo đánh giá cho Seller sau giao dịch.
+        /// </summary>
+        [Authorize(Roles = "BUYER")]
         [HttpPost]
         public async Task<ActionResult<ReviewResponseDto>> Create(CreateReviewDto dto)
         {
@@ -45,6 +51,7 @@ namespace Backend_CycleTrust.WebAPI.Controllers
             return NoContent();
         }
 
+        [Authorize(Roles = "ADMIN")]
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {

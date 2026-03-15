@@ -77,6 +77,11 @@ namespace Backend_CycleTrust.BLL.Services
 
         public async Task<BikeResponseDto> CreateAsync(CreateBikeDto dto)
         {
+            // Validate that SellerId is a user with SELLER role (roleId=3)
+            var seller = await _context.Users.FindAsync(dto.SellerId);
+            if (seller == null || seller.RoleId != 3)
+                throw new InvalidOperationException("Chỉ user có role SELLER mới được tạo listing.");
+
             var bike = new Bike
             {
                 SellerId = dto.SellerId,
@@ -89,7 +94,7 @@ namespace Backend_CycleTrust.BLL.Services
                 BikeCondition = dto.BikeCondition != null
                     ? Enum.Parse<BikeCondition>(dto.BikeCondition)
                     : null,
-                Status = BikeStatus.PENDING,
+                Status = BikeStatus.PENDING, // Always PENDING on creation
                 CreatedAt = DateTime.UtcNow
             };
 

@@ -1,5 +1,6 @@
 using Backend_CycleTrust.BLL.DTOs.AuthDTOs;
 using Backend_CycleTrust.BLL.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Backend_CycleTrust.WebAPI.Controllers
@@ -16,21 +17,23 @@ namespace Backend_CycleTrust.WebAPI.Controllers
         }
 
         /// <summary>
-        /// ??ng nh?p. Tr? v? JWT token n?u th�nh c�ng.
+        /// Đăng nhập. Trả về JWT token nếu thành công.
         /// </summary>
+        [AllowAnonymous]
         [HttpPost("login")]
         public async Task<ActionResult<LoginResponseDto>> Login([FromBody] LoginRequestDto dto)
         {
             var result = await _authService.LoginAsync(dto);
             if (result == null)
-                return Unauthorized(new { message = "Email ho?c m?t kh?u kh�ng ?�ng, ho?c t�i kho?n ?� b? kh�a." });
+                return Unauthorized(new { message = "Email hoặc mật khẩu không đúng, hoặc tài khoản đã bị khóa." });
 
             return Ok(result);
         }
 
         /// <summary>
-        /// ??ng k� t�i kho?n m?i. Tr? v? JWT token ngay sau khi ??ng k�.
+        /// Đăng ký tài khoản mới (mặc định role = BUYER). Trả về JWT token ngay sau khi đăng ký.
         /// </summary>
+        [AllowAnonymous]
         [HttpPost("register")]
         public async Task<ActionResult<LoginResponseDto>> Register([FromBody] RegisterRequestDto dto)
         {

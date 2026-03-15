@@ -1,11 +1,13 @@
 using Backend_CycleTrust.BLL.DTOs.RoleDTOs;
 using Backend_CycleTrust.BLL.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Backend_CycleTrust.WebAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(Roles = "ADMIN")]
     public class RolesController : ControllerBase
     {
         private readonly IRoleService _roleService;

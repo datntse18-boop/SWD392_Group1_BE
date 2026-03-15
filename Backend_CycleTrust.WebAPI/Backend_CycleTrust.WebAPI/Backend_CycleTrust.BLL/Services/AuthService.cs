@@ -59,7 +59,7 @@ namespace Backend_CycleTrust.BLL.Services
                 Password = hashedPassword,
                 Phone = dto.Phone,
                 Address = dto.Address,
-                RoleId = dto.RoleId,
+                RoleId = 2, // Always register as BUYER
                 Status = UserStatus.ACTIVE,
                 CreatedAt = DateTime.UtcNow
             };

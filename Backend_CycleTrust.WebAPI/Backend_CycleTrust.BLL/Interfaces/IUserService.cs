@@ -8,6 +8,8 @@ namespace Backend_CycleTrust.BLL.Interfaces
         Task<UserResponseDto?> GetByIdAsync(int id);
         Task<UserResponseDto> CreateAsync(CreateUserDto dto);
         Task<bool> UpdateAsync(int id, UpdateUserDto dto);
+        Task<bool> UpdateRoleAsync(int userId, int newRoleId);
+        Task<bool> RequestSellerRoleAsync(int userId);
         Task<bool> DeleteAsync(int id);
     }
 }

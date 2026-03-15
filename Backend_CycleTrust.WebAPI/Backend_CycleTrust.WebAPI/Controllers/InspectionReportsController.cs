@@ -1,11 +1,13 @@
 using Backend_CycleTrust.BLL.DTOs.InspectionReportDTOs;
 using Backend_CycleTrust.BLL.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Backend_CycleTrust.WebAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class InspectionReportsController : ControllerBase
     {
         private readonly IInspectionReportService _inspectionReportService;
@@ -30,6 +32,10 @@ namespace Backend_CycleTrust.WebAPI.Controllers
             return Ok(report);
         }
 
+        /// <summary>
+        /// Inspector tạo báo cáo kiểm định mới.
+        /// </summary>
+        [Authorize(Roles = "INSPECTOR")]
         [HttpPost]
         public async Task<ActionResult<InspectionReportResponseDto>> Create(CreateInspectionReportDto dto)
         {
@@ -37,6 +43,10 @@ namespace Backend_CycleTrust.WebAPI.Controllers
             return CreatedAtAction(nameof(GetById), new { id = report.ReportId }, report);
         }
 
+        /// <summary>
+        /// Inspector cập nhật báo cáo (Pass/Fail).
+        /// </summary>
+        [Authorize(Roles = "INSPECTOR")]
         [HttpPut("{id}")]
         public async Task<IActionResult> Update(int id, UpdateInspectionReportDto dto)
         {
@@ -45,6 +55,7 @@ namespace Backend_CycleTrust.WebAPI.Controllers
             return NoContent();
         }
 
+        [Authorize(Roles = "ADMIN")]
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {

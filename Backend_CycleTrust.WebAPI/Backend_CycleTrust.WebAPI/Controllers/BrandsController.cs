@@ -1,5 +1,6 @@
 using Backend_CycleTrust.BLL.DTOs.BrandDTOs;
 using Backend_CycleTrust.BLL.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Backend_CycleTrust.WebAPI.Controllers
@@ -15,6 +16,7 @@ namespace Backend_CycleTrust.WebAPI.Controllers
             _brandService = brandService;
         }
 
+        [AllowAnonymous]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<BrandResponseDto>>> GetAll()
         {
@@ -22,6 +24,7 @@ namespace Backend_CycleTrust.WebAPI.Controllers
             return Ok(brands);
         }
 
+        [AllowAnonymous]
         [HttpGet("{id}")]
         public async Task<ActionResult<BrandResponseDto>> GetById(int id)
         {
@@ -30,6 +33,7 @@ namespace Backend_CycleTrust.WebAPI.Controllers
             return Ok(brand);
         }
 
+        [Authorize(Roles = "ADMIN")]
         [HttpPost]
         public async Task<ActionResult<BrandResponseDto>> Create(CreateBrandDto dto)
         {
@@ -37,6 +41,7 @@ namespace Backend_CycleTrust.WebAPI.Controllers
             return CreatedAtAction(nameof(GetById), new { id = brand.BrandId }, brand);
         }
 
+        [Authorize(Roles = "ADMIN")]
         [HttpPut("{id}")]
         public async Task<IActionResult> Update(int id, UpdateBrandDto dto)
         {
@@ -45,6 +50,7 @@ namespace Backend_CycleTrust.WebAPI.Controllers
             return NoContent();
         }
 
+        [Authorize(Roles = "ADMIN")]
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {

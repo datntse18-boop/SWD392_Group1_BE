@@ -67,6 +67,11 @@ namespace Backend_CycleTrust.BLL.Services
 
         public async Task<InspectionReportResponseDto> CreateAsync(CreateInspectionReportDto dto)
         {
+            // Validate inspector has INSPECTOR role (roleId=4)
+            var inspector = await _context.Users.FindAsync(dto.InspectorId);
+            if (inspector == null || inspector.RoleId != 4)
+                throw new InvalidOperationException("Chỉ user có role INSPECTOR mới được tạo báo cáo kiểm định.");
+
             var report = new InspectionReport
             {
                 BikeId = dto.BikeId,

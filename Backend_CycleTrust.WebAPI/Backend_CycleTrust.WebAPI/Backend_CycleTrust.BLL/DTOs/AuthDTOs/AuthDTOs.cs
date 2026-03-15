@@ -25,6 +25,5 @@ namespace Backend_CycleTrust.BLL.DTOs.AuthDTOs
         public string Password { get; set; } = null!;
         public string? Phone { get; set; }
         public string? Address { get; set; }
-        public int RoleId { get; set; }
     }
 }

@@ -1,11 +1,13 @@
 using Backend_CycleTrust.BLL.DTOs.ReportDTOs;
 using Backend_CycleTrust.BLL.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Backend_CycleTrust.WebAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class ReportsController : ControllerBase
     {
         private readonly IReportService _reportService;
@@ -30,6 +32,10 @@ namespace Backend_CycleTrust.WebAPI.Controllers
             return Ok(report);
         }
 
+        /// <summary>
+        /// Buyer tạo báo cáo tranh chấp.
+        /// </summary>
+        [Authorize(Roles = "BUYER")]
         [HttpPost]
         public async Task<ActionResult<ReportResponseDto>> Create(CreateReportDto dto)
         {
@@ -37,6 +43,10 @@ namespace Backend_CycleTrust.WebAPI.Controllers
             return CreatedAtAction(nameof(GetById), new { id = report.ReportId }, report);
         }
 
+        /// <summary>
+        /// Admin xử lý tranh chấp (Resolved/Rejected).
+        /// </summary>
+        [Authorize(Roles = "ADMIN")]
         [HttpPut("{id}")]
         public async Task<IActionResult> Update(int id, UpdateReportDto dto)
         {
@@ -45,6 +55,7 @@ namespace Backend_CycleTrust.WebAPI.Controllers
             return NoContent();
         }
 
+        [Authorize(Roles = "ADMIN")]
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {

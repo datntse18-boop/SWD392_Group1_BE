@@ -1,11 +1,13 @@
 using Backend_CycleTrust.BLL.DTOs.OrderDTOs;
 using Backend_CycleTrust.BLL.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Backend_CycleTrust.WebAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class OrdersController : ControllerBase
     {
         private readonly IOrderService _orderService;
@@ -30,6 +32,10 @@ namespace Backend_CycleTrust.WebAPI.Controllers
             return Ok(order);
         }
 
+        /// <summary>
+        /// Buyer tạo đơn hàng mới.
+        /// </summary>
+        [Authorize(Roles = "BUYER")]
         [HttpPost]
         public async Task<ActionResult<OrderResponseDto>> Create(CreateOrderDto dto)
         {
@@ -45,6 +51,7 @@ namespace Backend_CycleTrust.WebAPI.Controllers
             return NoContent();
         }
 
+        [Authorize(Roles = "ADMIN")]
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
