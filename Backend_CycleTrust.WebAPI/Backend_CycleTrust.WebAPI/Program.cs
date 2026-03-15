@@ -31,6 +31,7 @@ namespace Backend_CycleTrust.WebAPI
             builder.Services.AddScoped<IBrandService, BrandService>();
             builder.Services.AddScoped<ICategoryService, CategoryService>();
             builder.Services.AddScoped<IBikeService, BikeService>();
+            builder.Services.AddScoped<ICloudinaryService, CloudinaryService>();
             builder.Services.AddScoped<IBikeImageService, BikeImageService>();
             builder.Services.AddScoped<IInspectionReportService, InspectionReportService>();
             builder.Services.AddScoped<IMessageService, MessageService>();
@@ -73,11 +74,11 @@ namespace Backend_CycleTrust.WebAPI
                 });
 
             builder.Services.AddEndpointsApiExplorer();
-            builder.Services.AddSwaggerGen(c =>
+                        builder.Services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "CycleTrust API", Version = "v1" });
 
-                // Cho phép nh?p JWT token trong Swagger UI
+                // Cho phep nhap JWT token trong Swagger UI
                 c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
                 {
                     Name = "Authorization",
@@ -85,7 +86,7 @@ namespace Backend_CycleTrust.WebAPI
                     Scheme = "Bearer",
                     BearerFormat = "JWT",
                     In = ParameterLocation.Header,
-                    Description = "Nh?p JWT token. Ví d?: Bearer {token}"
+                    Description = "Nhap JWT token. Vi du: Bearer {token}"
                 });
 
                 c.AddSecurityRequirement(new OpenApiSecurityRequirement
@@ -103,7 +104,6 @@ namespace Backend_CycleTrust.WebAPI
                     }
                 });
             });
-
             // ===== CORS =====
             builder.Services.AddCors(options =>
             {
@@ -116,9 +116,7 @@ namespace Backend_CycleTrust.WebAPI
             });
 
             var app = builder.Build();
-
-            // ===== Debug: Kiểm tra kết nối Database =====
-            using (var scope = app.Services.CreateScope())
+             using (var scope = app.Services.CreateScope())
             {
                 var logger = scope.ServiceProvider.GetRequiredService<ILogger<Program>>();
                 var dbContext = scope.ServiceProvider.GetRequiredService<CycleTrustDbContext>();
@@ -127,17 +125,16 @@ namespace Backend_CycleTrust.WebAPI
                     var canConnect = dbContext.Database.CanConnect();
                     if (canConnect)
                     {
-                        logger.LogInformation("✅ Ket noi Database thành công!");
-                       
+                        logger.LogInformation("✅ Kết nối Database thành công!");
                     }
                     else
                     {
-                        logger.LogError("❌ Không thể kết nối đến Database!");
+                        logger.LogError("❌ Không thể kết nối Database!");
                     }
                 }
                 catch (Exception ex)
                 {
-                    logger.LogError(ex, "❌ Lỗi khi kết nối đến Database: {Message}", ex.Message);
+                    logger.LogError(ex, "❌ Lỗi khi kết nối Database: {Message}", ex.Message);
                 }
             }
 

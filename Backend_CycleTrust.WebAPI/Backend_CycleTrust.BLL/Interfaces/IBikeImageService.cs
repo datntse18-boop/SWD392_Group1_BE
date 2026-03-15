@@ -8,5 +8,6 @@ namespace Backend_CycleTrust.BLL.Interfaces
         Task<BikeImageResponseDto?> GetByIdAsync(int id);
         Task<BikeImageResponseDto> CreateAsync(CreateBikeImageDto dto);
         Task<bool> DeleteAsync(int id);
+        Task<bool> DeleteByUrlAsync(int bikeId, string imageUrl);
     }
 }

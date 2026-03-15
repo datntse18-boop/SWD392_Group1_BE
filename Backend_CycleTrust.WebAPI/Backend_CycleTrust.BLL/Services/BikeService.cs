@@ -16,13 +16,34 @@ namespace Backend_CycleTrust.BLL.Services
             _context = context;
         }
 
-        public async Task<IEnumerable<BikeResponseDto>> GetAllAsync()
+        public async Task<IEnumerable<BikeResponseDto>> GetAllAsync(int? categoryId = null, int? brandId = null, decimal? minPrice = null, decimal? maxPrice = null, string? searchTitle = null)
         {
-            return await _context.Bikes
+            var query = _context.Bikes
                 .Include(b => b.Seller)
                 .Include(b => b.Brand)
                 .Include(b => b.Category)
                 .Include(b => b.BikeImages)
+                .AsQueryable();
+
+            if (categoryId.HasValue)
+                query = query.Where(b => b.CategoryId == categoryId.Value);
+
+            if (brandId.HasValue)
+                query = query.Where(b => b.BrandId == brandId.Value);
+
+            if (minPrice.HasValue)
+                query = query.Where(b => b.Price >= minPrice.Value);
+
+            if (maxPrice.HasValue)
+                query = query.Where(b => b.Price <= maxPrice.Value);
+
+            if (!string.IsNullOrWhiteSpace(searchTitle))
+            {
+                var lowerSearch = searchTitle.ToLower();
+                query = query.Where(b => b.Title.ToLower().Contains(lowerSearch));
+            }
+
+            return await query
                 .Select(b => new BikeResponseDto
                 {
                     BikeId = b.BikeId,

@@ -1,4 +1,5 @@
 using Backend_CycleTrust.BLL.DTOs.BikeDTOs;
+using Backend_CycleTrust.BLL.DTOs.BikeImageDTOs;
 using Backend_CycleTrust.BLL.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -10,10 +11,20 @@ namespace Backend_CycleTrust.WebAPI.Controllers
     public class BikesController : ControllerBase
     {
         private readonly IBikeService _bikeService;
+        private readonly ICloudinaryService _cloudinaryService;
+        private readonly IBikeImageService _bikeImageService;
+        private readonly ILogger<BikesController> _logger;
 
-        public BikesController(IBikeService bikeService)
+        public BikesController(
+            IBikeService bikeService, 
+            ICloudinaryService cloudinaryService, 
+            IBikeImageService bikeImageService,
+            ILogger<BikesController> logger)
         {
             _bikeService = bikeService;
+            _cloudinaryService = cloudinaryService;
+            _bikeImageService = bikeImageService;
+            _logger = logger;
         }
 
         /// <summary>
@@ -21,9 +32,14 @@ namespace Backend_CycleTrust.WebAPI.Controllers
         /// </summary>
         [AllowAnonymous]
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<BikeResponseDto>>> GetAll()
+        public async Task<ActionResult<IEnumerable<BikeResponseDto>>> GetAll(
+            [FromQuery] int? categoryId,
+            [FromQuery] int? brandId,
+            [FromQuery] decimal? minPrice,
+            [FromQuery] decimal? maxPrice,
+            [FromQuery] string? searchTitle)
         {
-            var bikes = await _bikeService.GetAllAsync();
+            var bikes = await _bikeService.GetAllAsync(categoryId, brandId, minPrice, maxPrice, searchTitle);
             return Ok(bikes);
         }
 
@@ -69,6 +85,86 @@ namespace Backend_CycleTrust.WebAPI.Controllers
             var result = await _bikeService.DeleteAsync(id);
             if (!result) return NotFound();
             return NoContent();
+        }
+
+        [HttpPost("{id}/images")]
+        public async Task<ActionResult<string>> UploadImage(int id, IFormFile file)
+        {
+            try
+            {
+                var bike = await _bikeService.GetByIdAsync(id);
+                if (bike == null) return NotFound("Bike not found.");
+
+                var imageUrl = await _cloudinaryService.UploadImageAsync(file, "bikes");
+                
+                // Save URL to database
+                await _bikeImageService.CreateAsync(new CreateBikeImageDto
+                {
+                    BikeId = id,
+                    ImageUrl = imageUrl
+                });
+                
+                return Ok(new { imageUrl });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error uploading image for bike {BikeId}: {Message}", id, ex.Message);
+                return BadRequest(new { message = ex.Message });
+            }
+        }
+
+        [HttpDelete("{id}/images")]
+        public async Task<IActionResult> DeleteImage(int id, [FromQuery] string imageUrl)
+        {
+            if (string.IsNullOrEmpty(imageUrl))
+            {
+                return BadRequest(new { message = "Image URL is required." });
+            }
+
+            try
+            {
+                var bike = await _bikeService.GetByIdAsync(id);
+                if (bike == null) return NotFound(new { message = "Bike not found." });
+
+                // Try to delete from Cloudinary
+                var cloudinaryDeleted = await _cloudinaryService.DeleteImageAsync(imageUrl);
+                if (!cloudinaryDeleted)
+                {
+                    _logger.LogWarning("Failed to delete image from Cloudinary or URL parsing failed. Proceeding with DB deletion. URL: {Url}", imageUrl);
+                }
+
+                // Delete from DB
+                var dbDeleted = await _bikeImageService.DeleteByUrlAsync(id, imageUrl);
+                if (!dbDeleted)
+                {
+                    return NotFound(new { message = "Image not found in database for this bike." });
+                }
+
+                return Ok(new { message = "Image deleted successfully." });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error deleting image for bike {BikeId}, URL {Url}: {Message}", id, imageUrl, ex.Message);
+                return BadRequest(new { message = ex.Message });
+            }
+        }
+        // ===== Admin: Approve / Reject Listing (FR-13) =====
+        [Authorize(Roles = "ADMIN")]
+        [HttpPut("{id}/approve")]
+        public async Task<IActionResult> Approve(int id)
+        {
+            var result = await _bikeService.ApproveAsync(id);
+            if (!result) return BadRequest(new { message = "Bike not found or not in PENDING status." });
+            return Ok(new { message = "Bike listing approved successfully." });
+        }
+
+        [Authorize(Roles = "ADMIN")]
+        [HttpPut("{id}/reject")]
+        public async Task<IActionResult> Reject(int id)
+        {
+            var result = await _bikeService.RejectAsync(id);
+            if (!result) return BadRequest(new { message = "Bike not found or not in PENDING status." });
+            return Ok(new { message = "Bike listing rejected successfully." });
         }
     }
 }
