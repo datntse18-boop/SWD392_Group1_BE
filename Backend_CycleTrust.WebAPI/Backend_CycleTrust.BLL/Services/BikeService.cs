@@ -156,5 +156,25 @@ namespace Backend_CycleTrust.BLL.Services
             await _context.SaveChangesAsync();
             return true;
         }
+
+        public async Task<bool> ApproveAsync(int id)
+        {
+            var bike = await _context.Bikes.FindAsync(id);
+            if (bike == null || bike.Status != BikeStatus.PENDING) return false;
+
+            bike.Status = BikeStatus.APPROVED;
+            await _context.SaveChangesAsync();
+            return true;
+        }
+
+        public async Task<bool> RejectAsync(int id)
+        {
+            var bike = await _context.Bikes.FindAsync(id);
+            if (bike == null || bike.Status != BikeStatus.PENDING) return false;
+
+            bike.Status = BikeStatus.REJECTED;
+            await _context.SaveChangesAsync();
+            return true;
+        }
     }
 }

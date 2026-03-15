@@ -125,16 +125,16 @@ namespace Backend_CycleTrust.WebAPI
                     var canConnect = dbContext.Database.CanConnect();
                     if (canConnect)
                     {
-                        logger.LogInformation("✅ Kết nối Database thành công!");
+                        logger.LogInformation(" -------- Connect Database success! --------");
                     }
                     else
                     {
-                        logger.LogError("❌ Không thể kết nối Database!");
+                        logger.LogError("not connect Database!");
                     }
                 }
                 catch (Exception ex)
                 {
-                    logger.LogError(ex, "❌ Lỗi khi kết nối Database: {Message}", ex.Message);
+                    logger.LogError(ex, "ERORR Database: {Message}", ex.Message);
                 }
             }
 
