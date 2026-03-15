@@ -7,7 +7,6 @@ namespace Backend_CycleTrust.WebAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(Roles = "ADMIN")]
     public class UsersController : ControllerBase
     {
         private readonly IUserService _userService;
