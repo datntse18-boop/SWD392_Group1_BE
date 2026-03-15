@@ -2,6 +2,7 @@ using Backend_CycleTrust.BLL.DTOs.OrderDTOs;
 using Backend_CycleTrust.BLL.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace Backend_CycleTrust.WebAPI.Controllers
 {
@@ -39,8 +40,15 @@ namespace Backend_CycleTrust.WebAPI.Controllers
         [HttpPost]
         public async Task<ActionResult<OrderResponseDto>> Create(CreateOrderDto dto)
         {
-            var order = await _orderService.CreateAsync(dto);
-            return CreatedAtAction(nameof(GetById), new { id = order.OrderId }, order);
+            try
+            {
+                var order = await _orderService.CreateAsync(dto);
+                return CreatedAtAction(nameof(GetById), new { id = order.OrderId }, order);
+            }
+            catch (InvalidOperationException ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
         }
 
         [HttpPut("{id}")]
@@ -49,6 +57,26 @@ namespace Backend_CycleTrust.WebAPI.Controllers
             var result = await _orderService.UpdateAsync(id, dto);
             if (!result) return NotFound();
             return NoContent();
+        }
+
+        [Authorize(Roles = "BUYER")]
+        [HttpPut("{id}/received")]
+        public async Task<IActionResult> MarkAsReceived(int id)
+        {
+            var buyerIdClaim = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (string.IsNullOrEmpty(buyerIdClaim) || !int.TryParse(buyerIdClaim, out var buyerId))
+                return Unauthorized(new { message = "Invalid token: buyer ID not found." });
+
+            try
+            {
+                var result = await _orderService.MarkAsReceivedAsync(id, buyerId);
+                if (!result) return NotFound();
+                return NoContent();
+            }
+            catch (InvalidOperationException ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
         }
 
         [Authorize(Roles = "ADMIN")]

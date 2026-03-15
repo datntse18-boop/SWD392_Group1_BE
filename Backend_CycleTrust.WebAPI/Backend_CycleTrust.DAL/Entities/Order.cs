@@ -43,5 +43,6 @@ namespace Backend_CycleTrust.DAL.Entities
         public virtual User Seller { get; set; } = null!;
 
         public virtual ICollection<Review> Reviews { get; set; } = new List<Review>();
+        public virtual ICollection<Payment> Payments { get; set; } = new List<Payment>();
     }
 }

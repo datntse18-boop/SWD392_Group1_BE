@@ -8,6 +8,7 @@ namespace Backend_CycleTrust.BLL.Interfaces
         Task<OrderResponseDto?> GetByIdAsync(int id);
         Task<OrderResponseDto> CreateAsync(CreateOrderDto dto);
         Task<bool> UpdateAsync(int id, UpdateOrderDto dto);
+        Task<bool> MarkAsReceivedAsync(int id, int buyerId);
         Task<bool> DeleteAsync(int id);
     }
 }

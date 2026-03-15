@@ -19,6 +19,7 @@ namespace Backend_CycleTrust.DAL.Data
         public DbSet<InspectionReport> InspectionReports { get; set; }
         public DbSet<Message> Messages { get; set; }
         public DbSet<Order> Orders { get; set; }
+        public DbSet<Payment> Payments { get; set; }
         public DbSet<Report> Reports { get; set; }
         public DbSet<Review> Reviews { get; set; }
         public DbSet<Wishlist> Wishlists { get; set; }
@@ -45,6 +46,11 @@ namespace Backend_CycleTrust.DAL.Data
 
             modelBuilder.Entity<Order>()
                 .Property(o => o.Status)
+                .HasConversion<string>()
+                .HasMaxLength(20);
+
+            modelBuilder.Entity<Payment>()
+                .Property(p => p.Status)
                 .HasConversion<string>()
                 .HasMaxLength(20);
 
@@ -162,6 +168,13 @@ namespace Backend_CycleTrust.DAL.Data
                 .WithMany(u => u.SellerOrders)
                 .HasForeignKey(o => o.SellerId)
                 .OnDelete(DeleteBehavior.Restrict);
+
+            // ===== Payment =====
+            modelBuilder.Entity<Payment>()
+                .HasOne(p => p.Order)
+                .WithMany(o => o.Payments)
+                .HasForeignKey(p => p.OrderId)
+                .OnDelete(DeleteBehavior.Cascade);
 
             // ===== Report =====
             modelBuilder.Entity<Report>()

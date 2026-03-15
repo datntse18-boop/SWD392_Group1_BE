@@ -37,6 +37,7 @@ namespace Backend_CycleTrust.WebAPI
             builder.Services.AddScoped<IInspectionReportService, InspectionReportService>();
             builder.Services.AddScoped<IMessageService, MessageService>();
             builder.Services.AddScoped<IOrderService, OrderService>();
+            builder.Services.AddScoped<IPaymentService, PaymentService>();
             builder.Services.AddScoped<IReportService, ReportService>();
             builder.Services.AddScoped<IReviewService, ReviewService>();
             builder.Services.AddScoped<IWishlistService, WishlistService>();

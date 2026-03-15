@@ -77,13 +77,23 @@ namespace Backend_CycleTrust.BLL.Services
             if (bike == null || bike.Status != BikeStatus.APPROVED)
                 throw new InvalidOperationException("Chỉ xe có trạng thái APPROVED mới được đặt hàng.");
 
+            var existingActiveOrder = await _context.Orders.AnyAsync(o =>
+                o.BikeId == dto.BikeId
+                && o.Status != OrderStatus.CANCELLED
+                && o.Status != OrderStatus.COMPLETED);
+
+            if (existingActiveOrder)
+                throw new InvalidOperationException("Xe này đã có đơn hàng đang xử lý.");
+
+            var depositAmount = Math.Round(dto.TotalAmount * 0.10m, 2, MidpointRounding.AwayFromZero);
+
             var order = new Order
             {
                 BikeId = dto.BikeId,
                 BuyerId = dto.BuyerId,
-                SellerId = dto.SellerId,
+                SellerId = bike.SellerId,
                 TotalAmount = dto.TotalAmount,
-                DepositAmount = dto.DepositAmount,
+                DepositAmount = depositAmount,
                 Status = OrderStatus.PENDING,
                 CreatedAt = DateTime.UtcNow
             };
@@ -104,6 +114,23 @@ namespace Backend_CycleTrust.BLL.Services
             if (Enum.TryParse<OrderStatus>(dto.Status, out var status))
                 order.Status = status;
 
+            await _context.SaveChangesAsync();
+            return true;
+        }
+
+        public async Task<bool> MarkAsReceivedAsync(int id, int buyerId)
+        {
+            var order = await _context.Orders.FindAsync(id);
+            if (order == null)
+                return false;
+
+            if (order.BuyerId != buyerId)
+                throw new InvalidOperationException("Only the buyer of this order can confirm receiving the bike.");
+
+            if (order.Status != OrderStatus.DEPOSITED)
+                throw new InvalidOperationException("Only deposited orders can be marked as completed.");
+
+            order.Status = OrderStatus.COMPLETED;
             await _context.SaveChangesAsync();
             return true;
         }
