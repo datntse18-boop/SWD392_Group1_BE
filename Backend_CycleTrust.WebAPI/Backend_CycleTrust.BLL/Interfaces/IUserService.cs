@@ -9,7 +9,5 @@ namespace Backend_CycleTrust.BLL.Interfaces
         Task<UserResponseDto> CreateAsync(CreateUserDto dto);
         Task<bool> UpdateAsync(int id, UpdateUserDto dto);
         Task<bool> DeleteAsync(int id);
-        Task<bool> BanAsync(int userId);
-        Task<bool> UnbanAsync(int userId);
     }
 }

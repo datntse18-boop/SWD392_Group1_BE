@@ -117,25 +117,5 @@ namespace Backend_CycleTrust.BLL.Services
             await _context.SaveChangesAsync();
             return true;
         }
-
-        public async Task<bool> BanAsync(int userId)
-        {
-            var user = await _context.Users.FindAsync(userId);
-            if (user == null || user.Status == UserStatus.BANNED) return false;
-
-            user.Status = UserStatus.BANNED;
-            await _context.SaveChangesAsync();
-            return true;
-        }
-
-        public async Task<bool> UnbanAsync(int userId)
-        {
-            var user = await _context.Users.FindAsync(userId);
-            if (user == null || user.Status == UserStatus.ACTIVE) return false;
-
-            user.Status = UserStatus.ACTIVE;
-            await _context.SaveChangesAsync();
-            return true;
-        }
     }
 }

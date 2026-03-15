@@ -1,7 +1,6 @@
 using Backend_CycleTrust.BLL.DTOs.BikeDTOs;
 using Backend_CycleTrust.BLL.DTOs.BikeImageDTOs;
 using Backend_CycleTrust.BLL.Interfaces;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Backend_CycleTrust.WebAPI.Controllers
