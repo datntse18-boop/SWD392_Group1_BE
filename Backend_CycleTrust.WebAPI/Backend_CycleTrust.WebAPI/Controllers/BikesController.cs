@@ -1,7 +1,6 @@
 using Backend_CycleTrust.BLL.DTOs.BikeDTOs;
 using Backend_CycleTrust.BLL.DTOs.BikeImageDTOs;
 using Backend_CycleTrust.BLL.Interfaces;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Backend_CycleTrust.WebAPI.Controllers
@@ -94,24 +93,6 @@ namespace Backend_CycleTrust.WebAPI.Controllers
                 _logger.LogError(ex, "Error uploading image for bike {BikeId}: {Message}", id, ex.Message);
                 return BadRequest(new { message = ex.Message });
             }
-        }
-        // ===== Admin: Approve / Reject Listing (FR-13) =====
-        [Authorize(Roles = "ADMIN")]
-        [HttpPut("{id}/approve")]
-        public async Task<IActionResult> Approve(int id)
-        {
-            var result = await _bikeService.ApproveAsync(id);
-            if (!result) return BadRequest(new { message = "Bike not found or not in PENDING status." });
-            return Ok(new { message = "Bike listing approved successfully." });
-        }
-
-        [Authorize(Roles = "ADMIN")]
-        [HttpPut("{id}/reject")]
-        public async Task<IActionResult> Reject(int id)
-        {
-            var result = await _bikeService.RejectAsync(id);
-            if (!result) return BadRequest(new { message = "Bike not found or not in PENDING status." });
-            return Ok(new { message = "Bike listing rejected successfully." });
         }
     }
 }
