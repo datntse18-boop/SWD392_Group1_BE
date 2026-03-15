@@ -11,6 +11,16 @@ namespace Backend_CycleTrust.BLL.DTOs.InspectionReportDTOs
         public string? ReportFile { get; set; }
     }
 
+    public class CompleteInspectionReportDto
+    {
+        public string? FrameCondition { get; set; }
+        public string? BrakeCondition { get; set; }
+        public string? DrivetrainCondition { get; set; }
+        public string? OverallComment { get; set; }
+        public string? ReportFile { get; set; }
+        public string Result { get; set; } = null!; // passed | failed
+    }
+
     public class UpdateInspectionReportDto
     {
         public string? FrameCondition { get; set; }

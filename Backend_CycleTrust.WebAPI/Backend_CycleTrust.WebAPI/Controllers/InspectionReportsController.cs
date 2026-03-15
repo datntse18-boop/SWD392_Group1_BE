@@ -1,3 +1,4 @@
+using System.Security.Claims;
 using Backend_CycleTrust.BLL.DTOs.InspectionReportDTOs;
 using Backend_CycleTrust.BLL.Interfaces;
 using Microsoft.AspNetCore.Authorization;
@@ -24,6 +25,14 @@ namespace Backend_CycleTrust.WebAPI.Controllers
             return Ok(reports);
         }
 
+        [Authorize(Roles = "INSPECTOR")]
+        [HttpGet("pending")]
+        public async Task<ActionResult<IEnumerable<InspectionReportResponseDto>>> GetPending()
+        {
+            var reports = await _inspectionReportService.GetPendingRequestsAsync();
+            return Ok(reports);
+        }
+
         [HttpGet("{id}")]
         public async Task<ActionResult<InspectionReportResponseDto>> GetById(int id)
         {
@@ -46,6 +55,25 @@ namespace Backend_CycleTrust.WebAPI.Controllers
         /// <summary>
         /// Inspector cập nhật báo cáo (Pass/Fail).
         /// </summary>
+        [Authorize(Roles = "INSPECTOR")]
+        [HttpPut("{id}/complete")]
+        public async Task<ActionResult<InspectionReportResponseDto>> Complete(int id, CompleteInspectionReportDto dto)
+        {
+            var inspectorIdClaim = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (string.IsNullOrEmpty(inspectorIdClaim) || !int.TryParse(inspectorIdClaim, out var inspectorId))
+                return Unauthorized(new { message = "Invalid token: inspector ID not found." });
+
+            try
+            {
+                var report = await _inspectionReportService.CompleteInspectionAsync(id, inspectorId, dto);
+                return Ok(report);
+            }
+            catch (InvalidOperationException ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
+        }
+
         [Authorize(Roles = "INSPECTOR")]
         [HttpPut("{id}")]
         public async Task<IActionResult> Update(int id, UpdateInspectionReportDto dto)

@@ -16,6 +16,66 @@ namespace Backend_CycleTrust.BLL.Services
             _context = context;
         }
 
+        private static bool TryParseBikeCondition(string? value, out BikeCondition condition)
+        {
+            condition = default;
+            if (string.IsNullOrWhiteSpace(value)) return false;
+
+            var normalized = value.Trim().Replace("-", " ").Replace("_", " ").ToLowerInvariant();
+
+            return normalized switch
+            {
+                "new" => (condition = BikeCondition.NEW) == BikeCondition.NEW,
+                "like new" or "used like new" => (condition = BikeCondition.USED_LIKE_NEW) == BikeCondition.USED_LIKE_NEW,
+                "used" or "used good" or "good" => (condition = BikeCondition.USED_GOOD) == BikeCondition.USED_GOOD,
+                "needs repair" or "used fair" or "fair" => (condition = BikeCondition.USED_FAIR) == BikeCondition.USED_FAIR,
+                _ => Enum.TryParse(value, ignoreCase: true, out condition)
+            };
+        }
+
+        private static BikeResponseDto MapBikeToResponse(Bike bike)
+        {
+            var reports = bike.InspectionReports
+                .OrderByDescending(r => r.InspectedAt)
+                .Select(r => new BikeInspectionReportDto
+                {
+                    ReportId = r.ReportId,
+                    InspectorId = r.InspectorId,
+                    InspectorName = r.Inspector?.FullName,
+                    ReportFile = r.ReportFile,
+                    InspectionStatus = r.InspectionStatus.ToString(),
+                    OverallComment = r.OverallComment,
+                    InspectedAt = r.InspectedAt
+                })
+                .ToList();
+
+            var latestReport = reports.FirstOrDefault();
+            var isInspected = latestReport?.InspectionStatus == InspectionStatus.APPROVED.ToString();
+
+            return new BikeResponseDto
+            {
+                BikeId = bike.BikeId,
+                SellerId = bike.SellerId,
+                SellerName = bike.Seller.FullName,
+                Title = bike.Title,
+                Description = bike.Description,
+                Price = bike.Price,
+                BrandId = bike.BrandId,
+                BrandName = bike.Brand?.BrandName,
+                CategoryId = bike.CategoryId,
+                CategoryName = bike.Category?.CategoryName,
+                FrameSize = bike.FrameSize,
+                BikeCondition = bike.BikeCondition?.ToString(),
+                Status = bike.Status.ToString(),
+                IsInspected = isInspected,
+                InspectionStatus = latestReport?.InspectionStatus ?? "NOT_INSPECTED",
+                InspectionWarning = isInspected ? null : "The product has not been inspected by the Inspector.",
+                CreatedAt = bike.CreatedAt,
+                ImageUrls = bike.BikeImages.Select(bi => bi.ImageUrl).ToList(),
+                InspectionReports = reports
+            };
+        }
+
         public async Task<IEnumerable<BikeResponseDto>> GetAllAsync(int? categoryId = null, int? brandId = null, decimal? minPrice = null, decimal? maxPrice = null, string? searchTitle = null)
         {
             var query = _context.Bikes
@@ -23,6 +83,8 @@ namespace Backend_CycleTrust.BLL.Services
                 .Include(b => b.Brand)
                 .Include(b => b.Category)
                 .Include(b => b.BikeImages)
+                .Include(b => b.InspectionReports)
+                    .ThenInclude(ir => ir.Inspector)
                 .AsQueryable();
 
             if (categoryId.HasValue)
@@ -43,26 +105,8 @@ namespace Backend_CycleTrust.BLL.Services
                 query = query.Where(b => b.Title.ToLower().Contains(lowerSearch));
             }
 
-            return await query
-                .Select(b => new BikeResponseDto
-                {
-                    BikeId = b.BikeId,
-                    SellerId = b.SellerId,
-                    SellerName = b.Seller.FullName,
-                    Title = b.Title,
-                    Description = b.Description,
-                    Price = b.Price,
-                    BrandId = b.BrandId,
-                    BrandName = b.Brand != null ? b.Brand.BrandName : null,
-                    CategoryId = b.CategoryId,
-                    CategoryName = b.Category != null ? b.Category.CategoryName : null,
-                    FrameSize = b.FrameSize,
-                    BikeCondition = b.BikeCondition != null ? b.BikeCondition.ToString() : null,
-                    Status = b.Status.ToString(),
-                    CreatedAt = b.CreatedAt,
-                    ImageUrls = b.BikeImages.Select(bi => bi.ImageUrl).ToList()
-                })
-                .ToListAsync();
+            var bikes = await query.ToListAsync();
+            return bikes.Select(MapBikeToResponse);
         }
 
         public async Task<BikeResponseDto?> GetByIdAsync(int id)
@@ -72,28 +116,13 @@ namespace Backend_CycleTrust.BLL.Services
                 .Include(b => b.Brand)
                 .Include(b => b.Category)
                 .Include(b => b.BikeImages)
+                .Include(b => b.InspectionReports)
+                    .ThenInclude(ir => ir.Inspector)
                 .FirstOrDefaultAsync(b => b.BikeId == id);
 
             if (bike == null) return null;
 
-            return new BikeResponseDto
-            {
-                BikeId = bike.BikeId,
-                SellerId = bike.SellerId,
-                SellerName = bike.Seller.FullName,
-                Title = bike.Title,
-                Description = bike.Description,
-                Price = bike.Price,
-                BrandId = bike.BrandId,
-                BrandName = bike.Brand?.BrandName,
-                CategoryId = bike.CategoryId,
-                CategoryName = bike.Category?.CategoryName,
-                FrameSize = bike.FrameSize,
-                BikeCondition = bike.BikeCondition?.ToString(),
-                Status = bike.Status.ToString(),
-                CreatedAt = bike.CreatedAt,
-                ImageUrls = bike.BikeImages.Select(bi => bi.ImageUrl).ToList()
-            };
+            return MapBikeToResponse(bike);
         }
 
         public async Task<BikeResponseDto> CreateAsync(CreateBikeDto dto)
@@ -102,6 +131,15 @@ namespace Backend_CycleTrust.BLL.Services
             var seller = await _context.Users.FindAsync(dto.SellerId);
             if (seller == null || seller.RoleId != 3)
                 throw new InvalidOperationException("Chỉ user có role SELLER mới được tạo listing.");
+
+            BikeCondition? bikeCondition = null;
+            if (!string.IsNullOrWhiteSpace(dto.BikeCondition))
+            {
+                if (!TryParseBikeCondition(dto.BikeCondition, out var parsedCondition))
+                    throw new InvalidOperationException("BikeCondition không hợp lệ. Giá trị hợp lệ: NEW, USED_LIKE_NEW, USED_GOOD, USED_FAIR.");
+
+                bikeCondition = parsedCondition;
+            }
 
             var bike = new Bike
             {
@@ -112,9 +150,7 @@ namespace Backend_CycleTrust.BLL.Services
                 BrandId = dto.BrandId,
                 CategoryId = dto.CategoryId,
                 FrameSize = dto.FrameSize,
-                BikeCondition = dto.BikeCondition != null
-                    ? Enum.Parse<BikeCondition>(dto.BikeCondition)
-                    : null,
+                BikeCondition = bikeCondition,
                 Status = BikeStatus.PENDING, // Always PENDING on creation
                 CreatedAt = DateTime.UtcNow
             };
@@ -137,10 +173,10 @@ namespace Backend_CycleTrust.BLL.Services
             bike.CategoryId = dto.CategoryId;
             bike.FrameSize = dto.FrameSize;
 
-            if (dto.BikeCondition != null && Enum.TryParse<BikeCondition>(dto.BikeCondition, out var condition))
+            if (dto.BikeCondition != null && TryParseBikeCondition(dto.BikeCondition, out var condition))
                 bike.BikeCondition = condition;
 
-            if (dto.Status != null && Enum.TryParse<BikeStatus>(dto.Status, out var status))
+            if (dto.Status != null && Enum.TryParse<BikeStatus>(dto.Status, ignoreCase: true, out var status))
                 bike.Status = status;
 
             await _context.SaveChangesAsync();
