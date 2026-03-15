@@ -8,6 +8,18 @@ namespace Backend_CycleTrust.BLL.DTOs.MessageDTOs
         public string Content { get; set; } = null!;
     }
 
+    public class InboxMessageDto
+    {
+        public int OtherUserId { get; set; }
+        public string? OtherUserName { get; set; }
+        public int? BikeId { get; set; }
+        public string? BikeTitle { get; set; }
+        public int LastMessageId { get; set; }
+        public int LastSenderId { get; set; }
+        public string LastMessageContent { get; set; } = null!;
+        public DateTime LastSentAt { get; set; }
+    }
+
     public class MessageResponseDto
     {
         public int MessageId { get; set; }

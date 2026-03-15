@@ -35,8 +35,46 @@ namespace Backend_CycleTrust.WebAPI.Controllers
         [HttpPost]
         public async Task<ActionResult<MessageResponseDto>> Create(CreateMessageDto dto)
         {
-            var message = await _messageService.CreateAsync(dto);
-            return CreatedAtAction(nameof(GetById), new { id = message.MessageId }, message);
+            try
+            {
+                var message = await _messageService.CreateAsync(dto);
+                return CreatedAtAction(nameof(GetById), new { id = message.MessageId }, message);
+            }
+            catch (InvalidOperationException ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
+        }
+
+        [HttpGet("conversation")]
+        public async Task<ActionResult<IEnumerable<MessageResponseDto>>> GetConversation(
+            [FromQuery] int user1Id,
+            [FromQuery] int user2Id,
+            [FromQuery] int? bikeId)
+        {
+            try
+            {
+                var conversation = await _messageService.GetConversationAsync(user1Id, user2Id, bikeId);
+                return Ok(conversation);
+            }
+            catch (InvalidOperationException ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
+        }
+
+        [HttpGet("inbox/{userId}")]
+        public async Task<ActionResult<IEnumerable<InboxMessageDto>>> GetInbox(int userId)
+        {
+            try
+            {
+                var inbox = await _messageService.GetInboxAsync(userId);
+                return Ok(inbox);
+            }
+            catch (InvalidOperationException ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
         }
 
         [Authorize(Roles = "ADMIN")]

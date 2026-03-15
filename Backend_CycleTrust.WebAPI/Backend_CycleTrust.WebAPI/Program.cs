@@ -23,6 +23,7 @@ namespace Backend_CycleTrust.WebAPI
 
             // ===== Repositories =====
             builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
+            builder.Services.AddScoped<IMessageRepository, MessageRepository>();
 
             // ===== Services =====
             builder.Services.AddScoped<IAuthService, AuthService>();
@@ -74,23 +75,23 @@ namespace Backend_CycleTrust.WebAPI
                 });
 
             builder.Services.AddEndpointsApiExplorer();
-                        builder.Services.AddSwaggerGen(c =>
-            {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "CycleTrust API", Version = "v1" });
+            builder.Services.AddSwaggerGen(c =>
+{
+    c.SwaggerDoc("v1", new OpenApiInfo { Title = "CycleTrust API", Version = "v1" });
 
-                // Cho phep nhap JWT token trong Swagger UI
-                c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
-                {
-                    Name = "Authorization",
-                    Type = SecuritySchemeType.Http,
-                    Scheme = "Bearer",
-                    BearerFormat = "JWT",
-                    In = ParameterLocation.Header,
-                    Description = "Nhap JWT token. Vi du: Bearer {token}"
-                });
+    // Cho phep nhap JWT token trong Swagger UI
+    c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+    {
+        Name = "Authorization",
+        Type = SecuritySchemeType.Http,
+        Scheme = "Bearer",
+        BearerFormat = "JWT",
+        In = ParameterLocation.Header,
+        Description = "Nhap JWT token. Vi du: Bearer {token}"
+    });
 
-                c.AddSecurityRequirement(new OpenApiSecurityRequirement
-                {
+    c.AddSecurityRequirement(new OpenApiSecurityRequirement
+    {
                     {
                         new OpenApiSecurityScheme
                         {
@@ -102,8 +103,8 @@ namespace Backend_CycleTrust.WebAPI
                         },
                         Array.Empty<string>()
                     }
-                });
-            });
+    });
+});
             // ===== CORS =====
             builder.Services.AddCors(options =>
             {
@@ -116,7 +117,7 @@ namespace Backend_CycleTrust.WebAPI
             });
 
             var app = builder.Build();
-             using (var scope = app.Services.CreateScope())
+            using (var scope = app.Services.CreateScope())
             {
                 var logger = scope.ServiceProvider.GetRequiredService<ILogger<Program>>();
                 var dbContext = scope.ServiceProvider.GetRequiredService<CycleTrustDbContext>();
