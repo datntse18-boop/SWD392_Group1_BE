@@ -54,6 +54,15 @@ namespace Backend_CycleTrust.BLL.Services
 
         public async Task<WishlistResponseDto> CreateAsync(CreateWishlistDto dto)
         {
+            var existingWishlist = await _context.Wishlists
+                .AsNoTracking()
+                .FirstOrDefaultAsync(w => w.BuyerId == dto.BuyerId && w.BikeId == dto.BikeId);
+
+            if (existingWishlist != null)
+            {
+                throw new InvalidOperationException("This bike is already in your wishlist.");
+            }
+
             var wishlist = new Wishlist
             {
                 BuyerId = dto.BuyerId,
@@ -62,7 +71,16 @@ namespace Backend_CycleTrust.BLL.Services
             };
 
             _context.Wishlists.Add(wishlist);
-            await _context.SaveChangesAsync();
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateException ex) when (
+                ex.InnerException?.Message?.Contains("IX_wishlist_buyer_id_bike_id", StringComparison.OrdinalIgnoreCase) == true
+                || ex.InnerException?.Message?.Contains("duplicate key value violates unique constraint", StringComparison.OrdinalIgnoreCase) == true)
+            {
+                throw new InvalidOperationException("This bike is already in your wishlist.");
+            }
 
             return await GetByIdAsync(wishlist.WishlistId) ?? throw new Exception("Failed to create wishlist item");
         }

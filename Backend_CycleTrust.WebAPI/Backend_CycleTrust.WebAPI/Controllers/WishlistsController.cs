@@ -35,8 +35,15 @@ namespace Backend_CycleTrust.WebAPI.Controllers
         [HttpPost]
         public async Task<ActionResult<WishlistResponseDto>> Create(CreateWishlistDto dto)
         {
-            var wishlist = await _wishlistService.CreateAsync(dto);
-            return CreatedAtAction(nameof(GetById), new { id = wishlist.WishlistId }, wishlist);
+            try
+            {
+                var wishlist = await _wishlistService.CreateAsync(dto);
+                return CreatedAtAction(nameof(GetById), new { id = wishlist.WishlistId }, wishlist);
+            }
+            catch (InvalidOperationException ex)
+            {
+                return Conflict(new { message = ex.Message });
+            }
         }
 
         [HttpDelete("{id}")]
