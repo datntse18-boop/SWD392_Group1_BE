@@ -302,7 +302,7 @@ namespace Backend_CycleTrust.DAL.Data
 
             // Report (buyer reports a listing)
             modelBuilder.Entity<Report>().HasData(
-                new Report { ReportId = 1, ReporterId = 2, BikeId = 3, Reason = "Giá niêm yết không hợp lý so với tình trạng xe.", Status = Enums.ReportStatus.PENDING, CreatedAt = seedDate }
+                new Report { ReportId = 1, ReporterId = 2, BikeId = 3, Reason = "Giá niêm yết không hợp lý so với tình trạng xe.", Status = Enums.ReportStatus.Pending, CreatedAt = seedDate }
             );
         }
     }

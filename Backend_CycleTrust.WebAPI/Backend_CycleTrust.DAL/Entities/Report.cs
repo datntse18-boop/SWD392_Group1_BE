@@ -21,8 +21,11 @@ namespace Backend_CycleTrust.DAL.Entities
         [Column("reason")]
         public string Reason { get; set; } = null!;
 
+        [Column("image_urls")]
+        public List<string>? ImageUrls { get; set; }
+
         [Column("status")]
-        public ReportStatus Status { get; set; } = ReportStatus.PENDING;
+        public ReportStatus Status { get; set; } = ReportStatus.Pending;
 
         [Column("created_at")]
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;

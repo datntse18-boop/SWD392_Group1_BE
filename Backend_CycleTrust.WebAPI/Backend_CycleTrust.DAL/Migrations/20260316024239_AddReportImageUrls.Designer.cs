@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using Backend_CycleTrust.DAL.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -12,9 +13,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Backend_CycleTrust.DAL.Migrations
 {
     [DbContext(typeof(CycleTrustDbContext))]
-    partial class CycleTrustDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260316024239_AddReportImageUrls")]
+    partial class AddReportImageUrls
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

@@ -41,6 +41,19 @@ namespace Backend_CycleTrust.BLL.Services
             return uploadResult.SecureUrl.AbsoluteUri;
         }
 
+        public async Task<List<string>> UploadImagesAsync(IEnumerable<IFormFile> files, string folderName)
+        {
+            var imageUrls = new List<string>();
+
+            foreach (var file in files)
+            {
+                var imageUrl = await UploadImageAsync(file, folderName);
+                imageUrls.Add(imageUrl);
+            }
+
+            return imageUrls;
+        }
+
         public async Task<bool> DeleteImageAsync(string imageUrl)
         {
             // Extract Public ID from URL (simple version, might need adjustment based on folder structure)
