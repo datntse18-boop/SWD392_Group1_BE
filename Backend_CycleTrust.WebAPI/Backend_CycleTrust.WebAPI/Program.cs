@@ -1,4 +1,4 @@
-﻿using System.Text;
+using System.Text;
 using Backend_CycleTrust.BLL.Interfaces;
 using Backend_CycleTrust.BLL.Services;
 using Backend_CycleTrust.DAL.Data;
@@ -41,6 +41,7 @@ namespace Backend_CycleTrust.WebAPI
             builder.Services.AddScoped<IReportService, ReportService>();
             builder.Services.AddScoped<IReviewService, ReviewService>();
             builder.Services.AddScoped<IWishlistService, WishlistService>();
+            builder.Services.AddScoped<IChatbotService, ChatbotService>();
 
             // ===== JWT Authentication =====
             var jwtSettings = builder.Configuration.GetSection("JwtSettings");
