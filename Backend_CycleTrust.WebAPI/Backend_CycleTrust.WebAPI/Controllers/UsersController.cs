@@ -76,5 +76,25 @@ namespace Backend_CycleTrust.WebAPI.Controllers
             if (!result) return NotFound();
             return NoContent();
         }
+
+        // ===== Admin: Ban / Unban User (FR-14) =====
+
+        [Authorize(Roles = "ADMIN")]
+        [HttpPut("{id}/ban")]
+        public async Task<IActionResult> Ban(int id)
+        {
+            var result = await _userService.BanAsync(id);
+            if (!result) return BadRequest(new { message = "User not found or already banned." });
+            return Ok(new { message = "User has been banned successfully." });
+        }
+
+        [Authorize(Roles = "ADMIN")]
+        [HttpPut("{id}/unban")]
+        public async Task<IActionResult> Unban(int id)
+        {
+            var result = await _userService.UnbanAsync(id);
+            if (!result) return BadRequest(new { message = "User not found or already active." });
+            return Ok(new { message = "User has been unbanned successfully." });
+        }
     }
 }

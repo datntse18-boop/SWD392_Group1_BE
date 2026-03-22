@@ -91,5 +91,37 @@ namespace Backend_CycleTrust.WebAPI.Controllers
             if (!result) return NotFound();
             return NoContent();
         }
+
+        /// <summary>
+        /// FR-11: Get all inspection reports for a specific bike (Inspection History).
+        /// </summary>
+        [HttpGet("bike/{bikeId}/history")]
+        public async Task<ActionResult<IEnumerable<InspectionReportResponseDto>>> GetByBikeId(int bikeId)
+        {
+            var reports = await _inspectionReportService.GetByBikeIdAsync(bikeId);
+            return Ok(reports);
+        }
+
+        /// <summary>
+        /// FR-12: Inspector requests a re-inspection for a previously rejected bike.
+        /// </summary>
+        [Authorize(Roles = "INSPECTOR")]
+        [HttpPost("{id}/re-inspect")]
+        public async Task<ActionResult<InspectionReportResponseDto>> RequestReInspection(int id)
+        {
+            var inspectorIdClaim = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (string.IsNullOrEmpty(inspectorIdClaim) || !int.TryParse(inspectorIdClaim, out var inspectorId))
+                return Unauthorized(new { message = "Invalid token: inspector ID not found." });
+
+            try
+            {
+                var report = await _inspectionReportService.RequestReInspectionAsync(id, inspectorId);
+                return Ok(report);
+            }
+            catch (InvalidOperationException ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
+        }
     }
 }

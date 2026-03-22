@@ -1,0 +1,107 @@
+﻿Using launch settings from D:\fpsgame\Swd\SWD392_Group1_BE\Backend_CycleTrust.WebAPI\Backend_CycleTrust.WebAPI\Properties\launchSettings.json...
+Building...
+C:\Program Files\dotnet\sdk\10.0.103\Microsoft.Common.CurrentVersion.targets(2437,5): warning MSB3277: Found conflicts between different versions of "Microsoft.EntityFrameworkCore.Relational" that could not be resolved. [D:\fpsgame\Swd\SWD392_Group1_BE\Backend_CycleTrust.WebAPI\Backend_CycleTrust.BLL\Backend_CycleTrust.BLL.csproj]
+C:\Program Files\dotnet\sdk\10.0.103\Microsoft.Common.CurrentVersion.targets(2437,5): warning MSB3277: There was a conflict between "Microsoft.EntityFrameworkCore.Relational, Version=9.0.1.0, Culture=neutral, PublicKeyToken=adb9793829ddae60" and "Microsoft.EntityFrameworkCore.Relational, Version=9.0.2.0, Culture=neutral, PublicKeyToken=adb9793829ddae60". [D:\fpsgame\Swd\SWD392_Group1_BE\Backend_CycleTrust.WebAPI\Backend_CycleTrust.BLL\Backend_CycleTrust.BLL.csproj]
+C:\Program Files\dotnet\sdk\10.0.103\Microsoft.Common.CurrentVersion.targets(2437,5): warning MSB3277:     "Microsoft.EntityFrameworkCore.Relational, Version=9.0.1.0, Culture=neutral, PublicKeyToken=adb9793829ddae60" was chosen because it was primary and "Microsoft.EntityFrameworkCore.Relational, Version=9.0.2.0, Culture=neutral, PublicKeyToken=adb9793829ddae60" was not. [D:\fpsgame\Swd\SWD392_Group1_BE\Backend_CycleTrust.WebAPI\Backend_CycleTrust.BLL\Backend_CycleTrust.BLL.csproj]
+C:\Program Files\dotnet\sdk\10.0.103\Microsoft.Common.CurrentVersion.targets(2437,5): warning MSB3277:     References which depend on "Microsoft.EntityFrameworkCore.Relational, Version=9.0.1.0, Culture=neutral, PublicKeyToken=adb9793829ddae60" [C:\Users\ADMIN\.nuget\packages\microsoft.entityframeworkcore.relational\9.0.1\lib\net8.0\Microsoft.EntityFrameworkCore.Relational.dll]. [D:\fpsgame\Swd\SWD392_Group1_BE\Backend_CycleTrust.WebAPI\Backend_CycleTrust.BLL\Backend_CycleTrust.BLL.csproj]
+C:\Program Files\dotnet\sdk\10.0.103\Microsoft.Common.CurrentVersion.targets(2437,5): warning MSB3277:         C:\Users\ADMIN\.nuget\packages\microsoft.entityframeworkcore.relational\9.0.1\lib\net8.0\Microsoft.EntityFrameworkCore.Relational.dll [D:\fpsgame\Swd\SWD392_Group1_BE\Backend_CycleTrust.WebAPI\Backend_CycleTrust.BLL\Backend_CycleTrust.BLL.csproj]
+C:\Program Files\dotnet\sdk\10.0.103\Microsoft.Common.CurrentVersion.targets(2437,5): warning MSB3277:           Project file item includes which caused reference "C:\Users\ADMIN\.nuget\packages\microsoft.entityframeworkcore.relational\9.0.1\lib\net8.0\Microsoft.EntityFrameworkCore.Relational.dll". [D:\fpsgame\Swd\SWD392_Group1_BE\Backend_CycleTrust.WebAPI\Backend_CycleTrust.BLL\Backend_CycleTrust.BLL.csproj]
+C:\Program Files\dotnet\sdk\10.0.103\Microsoft.Common.CurrentVersion.targets(2437,5): warning MSB3277:             C:\Users\ADMIN\.nuget\packages\microsoft.entityframeworkcore.relational\9.0.1\lib\net8.0\Microsoft.EntityFrameworkCore.Relational.dll [D:\fpsgame\Swd\SWD392_Group1_BE\Backend_CycleTrust.WebAPI\Backend_CycleTrust.BLL\Backend_CycleTrust.BLL.csproj]
+C:\Program Files\dotnet\sdk\10.0.103\Microsoft.Common.CurrentVersion.targets(2437,5): warning MSB3277:     References which depend on or have been unified to "Microsoft.EntityFrameworkCore.Relational, Version=9.0.2.0, Culture=neutral, PublicKeyToken=adb9793829ddae60" []. [D:\fpsgame\Swd\SWD392_Group1_BE\Backend_CycleTrust.WebAPI\Backend_CycleTrust.BLL\Backend_CycleTrust.BLL.csproj]
+C:\Program Files\dotnet\sdk\10.0.103\Microsoft.Common.CurrentVersion.targets(2437,5): warning MSB3277:         D:\fpsgame\Swd\SWD392_Group1_BE\Backend_CycleTrust.WebAPI\Backend_CycleTrust.DAL\bin\Debug\net10.0\Backend_CycleTrust.DAL.dll [D:\fpsgame\Swd\SWD392_Group1_BE\Backend_CycleTrust.WebAPI\Backend_CycleTrust.BLL\Backend_CycleTrust.BLL.csproj]
+C:\Program Files\dotnet\sdk\10.0.103\Microsoft.Common.CurrentVersion.targets(2437,5): warning MSB3277:           Project file item includes which caused reference "D:\fpsgame\Swd\SWD392_Group1_BE\Backend_CycleTrust.WebAPI\Backend_CycleTrust.DAL\bin\Debug\net10.0\Backend_CycleTrust.DAL.dll". [D:\fpsgame\Swd\SWD392_Group1_BE\Backend_CycleTrust.WebAPI\Backend_CycleTrust.BLL\Backend_CycleTrust.BLL.csproj]
+C:\Program Files\dotnet\sdk\10.0.103\Microsoft.Common.CurrentVersion.targets(2437,5): warning MSB3277:             D:\fpsgame\Swd\SWD392_Group1_BE\Backend_CycleTrust.WebAPI\Backend_CycleTrust.DAL\bin\Debug\net10.0\Backend_CycleTrust.DAL.dll [D:\fpsgame\Swd\SWD392_Group1_BE\Backend_CycleTrust.WebAPI\Backend_CycleTrust.BLL\Backend_CycleTrust.BLL.csproj]
+info: Backend_CycleTrust.WebAPI.Program[0]
+       -------- Connect Database success! --------
+info: Microsoft.Hosting.Lifetime[14]
+      Now listening on: http://localhost:5026
+info: Microsoft.Hosting.Lifetime[0]
+      Application started. Press Ctrl+C to shut down.
+info: Microsoft.Hosting.Lifetime[0]
+      Hosting environment: Development
+info: Microsoft.Hosting.Lifetime[0]
+      Content root path: D:\fpsgame\Swd\SWD392_Group1_BE\Backend_CycleTrust.WebAPI\Backend_CycleTrust.WebAPI
+warn: Microsoft.AspNetCore.HttpsPolicy.HttpsRedirectionMiddleware[3]
+      Failed to determine the https port for redirect.
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (329ms) [Parameters=[@__dto_Email_0='?'], CommandType='Text', CommandTimeout='30']
+      SELECT u.user_id, u.address, u.created_at, u.email, u.full_name, u.password, u.pending_seller_upgrade, u.phone, u.role_id, u.status, r.role_id, r.role_name
+      FROM users AS u
+      INNER JOIN roles AS r ON u.role_id = r.role_id
+      WHERE u.email = @__dto_Email_0
+      LIMIT 1
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (246ms) [Parameters=[@__p_0='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+      SELECT u.user_id, u.address, u.created_at, u.email, u.full_name, u.password, u.pending_seller_upgrade, u.phone, u.role_id, u.status
+      FROM users AS u
+      WHERE u.user_id = @__p_0
+      LIMIT 1
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (250ms) [Parameters=[@p1='?' (DbType = Int32), @p0='?'], CommandType='Text', CommandTimeout='30']
+      UPDATE users SET status = @p0
+      WHERE user_id = @p1;
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (248ms) [Parameters=[@__p_0='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+      SELECT u.user_id, u.address, u.created_at, u.email, u.full_name, u.password, u.pending_seller_upgrade, u.phone, u.role_id, u.status
+      FROM users AS u
+      WHERE u.user_id = @__p_0
+      LIMIT 1
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (245ms) [Parameters=[@p1='?' (DbType = Int32), @p0='?'], CommandType='Text', CommandTimeout='30']
+      UPDATE users SET status = @p0
+      WHERE user_id = @p1;
+fail: Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddleware[1]
+      An unhandled exception has occurred while executing the request.
+      System.ArgumentException: Cloud name must be specified in Account!
+         at CloudinaryDotNet.ApiShared..ctor(Account account)
+         at CloudinaryDotNet.Api..ctor(Account account)
+         at CloudinaryDotNet.Cloudinary..ctor(Account account)
+         at Backend_CycleTrust.BLL.Services.CloudinaryService..ctor(IConfiguration configuration) in D:\fpsgame\Swd\SWD392_Group1_BE\Backend_CycleTrust.WebAPI\Backend_CycleTrust.BLL\Services\CloudinaryService.cs:line 20
+         at System.RuntimeMethodHandle.InvokeMethod(ObjectHandleOnStack target, Void** arguments, ObjectHandleOnStack sig, BOOL isConstructor, ObjectHandleOnStack result)
+         at System.Reflection.MethodBaseInvoker.InvokeDirectByRefWithFewArgs(Object obj, Span`1 copyOfArgs, BindingFlags invokeAttr)
+         at System.Reflection.RuntimeConstructorInfo.Invoke(BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+         at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteVisitor`2.VisitCallSiteMain(ServiceCallSite callSite, TArgument argument)
+         at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteVisitor`2.VisitCallSite(ServiceCallSite callSite, TArgument argument)
+         at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteRuntimeResolver.Resolve(ServiceCallSite callSite, ServiceProviderEngineScope scope)
+         at Microsoft.Extensions.DependencyInjection.ServiceLookup.DynamicServiceProviderEngine.<>c__DisplayClass2_0.<RealizeService>b__0(ServiceProviderEngineScope scope)
+         at Microsoft.Extensions.DependencyInjection.ServiceLookup.ServiceProviderEngineScope.GetService(Type serviceType)
+         at lambda_method464(Closure, IServiceProvider, Object[])
+         at Microsoft.AspNetCore.Mvc.Controllers.ControllerFactoryProvider.<>c__DisplayClass6_0.<CreateControllerFactory>g__CreateController|0(ControllerContext controllerContext)
+         at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+         at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.InvokeInnerFilterAsync()
+      --- End of stack trace from previous location ---
+         at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+         at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+         at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+         at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+         at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+         at Swashbuckle.AspNetCore.SwaggerUI.SwaggerUIMiddleware.Invoke(HttpContext httpContext)
+         at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
+         at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddlewareImpl.Invoke(HttpContext context)
+fail: Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddleware[1]
+      An unhandled exception has occurred while executing the request.
+      System.ArgumentException: Cloud name must be specified in Account!
+         at CloudinaryDotNet.ApiShared..ctor(Account account)
+         at CloudinaryDotNet.Api..ctor(Account account)
+         at CloudinaryDotNet.Cloudinary..ctor(Account account)
+         at Backend_CycleTrust.BLL.Services.CloudinaryService..ctor(IConfiguration configuration) in D:\fpsgame\Swd\SWD392_Group1_BE\Backend_CycleTrust.WebAPI\Backend_CycleTrust.BLL\Services\CloudinaryService.cs:line 20
+         at InvokeStub_CloudinaryService..ctor(Object, Span`1)
+         at System.Reflection.RuntimeConstructorInfo.Invoke(BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+         at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteVisitor`2.VisitCallSiteMain(ServiceCallSite callSite, TArgument argument)
+         at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteVisitor`2.VisitCallSite(ServiceCallSite callSite, TArgument argument)
+         at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteRuntimeResolver.Resolve(ServiceCallSite callSite, ServiceProviderEngineScope scope)
+         at Microsoft.Extensions.DependencyInjection.ServiceLookup.DynamicServiceProviderEngine.<>c__DisplayClass2_0.<RealizeService>b__0(ServiceProviderEngineScope scope)
+         at Microsoft.Extensions.DependencyInjection.ServiceLookup.ServiceProviderEngineScope.GetService(Type serviceType)
+         at lambda_method472(Closure, IServiceProvider, Object[])
+         at Microsoft.AspNetCore.Mvc.Controllers.ControllerFactoryProvider.<>c__DisplayClass6_0.<CreateControllerFactory>g__CreateController|0(ControllerContext controllerContext)
+         at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+         at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.InvokeInnerFilterAsync()
+      --- End of stack trace from previous location ---
+         at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+         at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+         at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+         at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+         at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+         at Swashbuckle.AspNetCore.SwaggerUI.SwaggerUIMiddleware.Invoke(HttpContext httpContext)
+         at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
+         at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddlewareImpl.Invoke(HttpContext context)

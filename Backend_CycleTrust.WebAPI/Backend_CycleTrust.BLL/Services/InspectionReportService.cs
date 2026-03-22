@@ -192,5 +192,56 @@ namespace Backend_CycleTrust.BLL.Services
             await _context.SaveChangesAsync();
             return true;
         }
+
+        /// <summary>
+        /// FR-11: Get all inspection reports for a specific bike (Inspection History).
+        /// </summary>
+        public async Task<IEnumerable<InspectionReportResponseDto>> GetByBikeIdAsync(int bikeId)
+        {
+            var reports = await _context.InspectionReports
+                .Include(ir => ir.Bike)
+                .Include(ir => ir.Inspector)
+                .Where(ir => ir.BikeId == bikeId)
+                .OrderByDescending(ir => ir.InspectedAt)
+                .ToListAsync();
+
+            return reports.Select(MapToDto);
+        }
+
+        /// <summary>
+        /// FR-12: Inspector requests a re-inspection for a previously rejected bike.
+        /// </summary>
+        public async Task<InspectionReportResponseDto> RequestReInspectionAsync(int reportId, int inspectorId)
+        {
+            var originalReport = await _context.InspectionReports
+                .Include(x => x.Bike)
+                .FirstOrDefaultAsync(x => x.ReportId == reportId);
+
+            if (originalReport == null)
+                throw new InvalidOperationException("Inspection report not found.");
+
+            if (originalReport.InspectionStatus != InspectionStatus.REJECTED)
+                throw new InvalidOperationException("Only rejected inspections can be re-inspected.");
+
+            var hasPending = await _context.InspectionReports
+                .AnyAsync(x => x.BikeId == originalReport.BikeId && x.InspectionStatus == InspectionStatus.PENDING);
+
+            if (hasPending)
+                throw new InvalidOperationException("This bike already has a pending inspection request.");
+
+            var newReport = new InspectionReport
+            {
+                BikeId = originalReport.BikeId,
+                InspectorId = inspectorId,
+                OverallComment = "Re-inspection requested by inspector.",
+                InspectionStatus = InspectionStatus.PENDING,
+                InspectedAt = DateTime.UtcNow
+            };
+
+            _context.InspectionReports.Add(newReport);
+            await _context.SaveChangesAsync();
+
+            return await GetByIdAsync(newReport.ReportId) ?? throw new Exception("Failed to create re-inspection request.");
+        }
     }
 }

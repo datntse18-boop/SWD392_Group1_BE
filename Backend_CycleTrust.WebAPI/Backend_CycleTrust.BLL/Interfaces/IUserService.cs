@@ -11,5 +11,7 @@ namespace Backend_CycleTrust.BLL.Interfaces
         Task<bool> UpdateRoleAsync(int userId, int newRoleId);
         Task<bool> RequestSellerRoleAsync(int userId);
         Task<bool> DeleteAsync(int id);
+        Task<bool> BanAsync(int userId);
+        Task<bool> UnbanAsync(int userId);
     }
 }
